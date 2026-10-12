@@ -7,6 +7,7 @@ import {
   type ButtonHTMLAttributes,
   type InputHTMLAttributes,
   type ReactNode,
+  type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from "react";
 import { Icon } from "./icons";
@@ -107,12 +108,12 @@ export function PasswordInput({ error, ...rest }: InputHTMLAttributes<HTMLInputE
   );
 }
 
-export function Select({ className = "", children, ...rest }: InputHTMLAttributes<HTMLSelectElement> & { children: ReactNode }) {
+export function Select({ className = "", children, ...rest }: SelectHTMLAttributes<HTMLSelectElement> & { children: ReactNode }) {
   return (
     <div className="relative">
       <select
         className={`h-10 w-full appearance-none rounded-lg border border-border-strong bg-input px-3 pr-9 text-sm text-foreground transition-all focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary ${className}`}
-        {...(rest as any)}
+        {...rest}
       >
         {children}
       </select>

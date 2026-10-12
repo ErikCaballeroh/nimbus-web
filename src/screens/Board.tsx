@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "../components/icons";
-import { Avatar, Button, EmptyState, IconButton, PriorityBadge, Skeleton, Tag, Tooltip } from "../components/ui";
+import { Avatar, Button, IconButton, PriorityBadge, Skeleton, Tag, Tooltip } from "../components/ui";
 import { ExportModal, ImportModal, TaskDetailModal, TaskModal } from "../components/Modals";
 import { useStore } from "../store";
 import { fmtDateShort, isOverdue, statusMeta, statusOrder, type Status, type Task } from "../lib/data";

@@ -36,12 +36,17 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         router.push(pathFromRoute(next));
     };
 
-    useEffect(() => {
-        if (!authed) return;
+    const [trackedPathname, setTrackedPathname] = useState(pathname);
+    if (authed && pathname !== trackedPathname) {
+        setTrackedPathname(pathname);
         setLoading(true);
+    }
+
+    useEffect(() => {
+        if (!authed || !loading) return;
         const timer = window.setTimeout(() => setLoading(false), 650);
         return () => window.clearTimeout(timer);
-    }, [pathname, authed]);
+    }, [authed, loading]);
 
     if (!authed) return <Auth onAuthed={() => setAuthed(true)} />;
 
