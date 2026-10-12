@@ -1,5 +1,10 @@
-import { AuthRoute } from "@/src/components/AuthRoute";
+import { AuthShell } from "@/src/features/auth/components/AuthShell";
+import { RegisterForm } from "@/src/features/auth/components/RegisterForm";
 
 export default function RegisterPage() {
-    return <AuthRoute initialView="register" />;
+    return (
+        <AuthShell>
+            <RegisterForm />
+        </AuthShell>
+    );
 }

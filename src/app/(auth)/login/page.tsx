@@ -1,5 +1,10 @@
-import { AuthRoute } from "@/src/components/AuthRoute";
+import { AuthShell } from "@/src/features/auth/components/AuthShell";
+import { LoginForm } from "@/src/features/auth/components/LoginForm";
 
 export default function LoginPage() {
-    return <AuthRoute initialView="login" />;
+    return (
+        <AuthShell>
+            <LoginForm />
+        </AuthShell>
+    );
 }
