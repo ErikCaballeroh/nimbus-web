@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from "../../../components/ui";
+import { useTheme } from "../../../components/providers/ThemeProvider";
 import { isOverdue } from "../../../lib/utils";
 import { useStore } from "../../../store";
 import { ProjectsProgressChart } from "./ProjectsProgressChart";
@@ -10,7 +11,8 @@ import { StatCard } from "./StatCard";
 import { UpcomingTasksCard } from "./UpcomingTasksCard";
 
 export function DashboardScreen() {
-  const { tasks, projects, members, notifications, theme } = useStore();
+  const { tasks, projects, members, notifications } = useStore();
+  const { theme } = useTheme();
   const done = tasks.filter((t) => t.status === "done").length;
   const overdue = tasks.filter((t) => t.status !== "done" && isOverdue(t.due)).length;
 

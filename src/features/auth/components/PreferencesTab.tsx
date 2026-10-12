@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Field, Icon, Select, Toggle } from "../../../components/ui";
-import { useStore } from "../../../store";
+import { useTheme } from "../../../components/providers/ThemeProvider";
 import { SettingsSection } from "./SettingsSection";
 
 export function PreferencesTab() {
-  const { theme, toggleTheme } = useStore();
+  const { theme, toggleTheme } = useTheme();
   const [prefs, setPrefs] = useState({ email: true, push: true, weekly: false, mentions: true });
   return (
     <div className="flex flex-col gap-5 animate-fade">

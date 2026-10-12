@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { members as seedMembers } from "../lib/mock/members";
 import { projects as seedProjects } from "../lib/mock/projects";
 import { tasks as seedTasks } from "../lib/mock/tasks";
@@ -10,11 +10,7 @@ import type { Task, Status } from "../features/tasks/types";
 import type { Member } from "../features/members/types";
 import type { Notification } from "../features/notifications/types";
 
-type Theme = "light" | "dark";
-
 interface Store {
-  theme: Theme;
-  toggleTheme: () => void;
   projects: Project[];
   tasks: Task[];
   members: Member[];
@@ -37,20 +33,13 @@ let seq = 900;
 const uid = (p: string) => p + ++seq;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
   const [projects, setProjects] = useState(seedProjects);
   const [tasks, setTasks] = useState(seedTasks);
   const [members, setMembers] = useState(seedMembers);
   const [notifications, setNotifications] = useState(seedNotifs);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
-
   const value = useMemo<Store>(
     () => ({
-      theme,
-      toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
       projects,
       tasks,
       members,
@@ -113,7 +102,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         );
       },
     }),
-    [theme, projects, tasks, members, notifications]
+    [projects, tasks, members, notifications]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

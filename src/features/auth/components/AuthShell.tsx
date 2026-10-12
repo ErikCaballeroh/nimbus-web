@@ -2,10 +2,10 @@
 
 import type { ReactNode } from "react";
 import { Icon } from "../../../components/ui";
-import { useStore } from "../../../store";
+import { useTheme } from "../../../components/providers/ThemeProvider";
 
 export function AuthShell({ children }: { children: ReactNode }) {
-  const { theme, toggleTheme } = useStore();
+  const { theme, toggleTheme } = useTheme();
   return (
     <div className="grid min-h-full lg:grid-cols-[1fr_1.05fr]">
       {/* Left brand panel */}

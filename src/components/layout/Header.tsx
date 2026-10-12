@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Avatar, Icon, IconButton, Tooltip } from "../ui";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useStore } from "../../store";
+import { useTheme } from "../providers/ThemeProvider";
+import { useCurrentUser } from "../../features/auth/CurrentUserContext";
 import { relTime } from "../../lib/utils";
 
 export function Header({
@@ -18,8 +20,9 @@ export function Header({
   actions?: ReactNode;
 }) {
   const router = useRouter();
-  const { theme, toggleTheme, members, notifications } = useStore();
-  const me = members[0];
+  const { theme, toggleTheme } = useTheme();
+  const me = useCurrentUser();
+  const { members, notifications } = useStore();
   const unread = notifications.filter((n) => !n.read).length;
   const [openNotif, setOpenNotif] = useState(false);
   const [openUser, setOpenUser] = useState(false);
@@ -96,8 +99,12 @@ export function Header({
 
       {/* User */}
       <div className="relative" ref={userRef}>
-        <button onClick={() => setOpenUser((o) => !o)} className="rounded-full transition-transform active:scale-95">
-          <Avatar name={me.name} color={me.color} size={36} />
+        <button
+          onClick={() => setOpenUser((o) => !o)}
+          className="rounded-full transition-transform active:scale-95"
+          aria-label="Menú de usuario"
+        >
+          <Avatar name={me.name} color={me.avatarColor} size={36} />
         </button>
         {openUser && (
           <div className="animate-dropdown absolute right-0 top-12 z-50 w-56 overflow-hidden rounded-xl border border-border bg-popover py-1.5 shadow-[var(--shadow-lg)]">
@@ -121,7 +128,12 @@ export function Header({
             ))}
             <div className="my-1 border-t border-border" />
             <button
-              onClick={() => { setOpenUser(false); router.push("/login"); }}
+              onClick={async () => {
+                setOpenUser(false);
+                await fetch("/api/auth/logout", { method: "POST" });
+                router.push("/login");
+                router.refresh();
+              }}
               className="flex w-full items-center gap-2.5 px-3 py-2 text-[13px] text-danger transition-colors hover:bg-danger/8"
             >
               <Icon.logout width={16} height={16} /> Cerrar sesión
