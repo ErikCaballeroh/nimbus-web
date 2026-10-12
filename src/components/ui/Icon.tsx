@@ -13,7 +13,7 @@ const base = (props: P) => ({
   ...props,
 });
 
-export const Icon = {
+const icons = {
   dashboard: (p: P) => (
     <svg {...base(p)}><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></svg>
   ),
@@ -75,3 +75,16 @@ export const Icon = {
   flag: (p: P) => (<svg {...base(p)}><path d="M5 21V4M5 4h11l-2 4 2 4H5" /></svg>),
   tag: (p: P) => (<svg {...base(p)}><path d="M3 12V4a1 1 0 0 1 1-1h8l8 8-9 9-8-8Z" /><circle cx="8" cy="8" r="1.2" /></svg>),
 };
+
+export type IconName = keyof typeof icons;
+
+function IconComponent({ name, ...rest }: { name: IconName } & P) {
+  const Glyph = icons[name];
+  return <Glyph {...rest} />;
+}
+
+/**
+ * Supports both `<Icon name="dashboard" />` and the legacy dot-access
+ * `<Icon.dashboard />` used across existing screens.
+ */
+export const Icon = Object.assign(IconComponent, icons);

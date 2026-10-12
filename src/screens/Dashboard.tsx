@@ -11,8 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Icon } from "../components/icons";
-import { Avatar, Card, PriorityBadge, Skeleton } from "../components/ui";
+import { Avatar, Card, Icon, Skeleton } from "../components/ui";
+import { PriorityBadge } from "../features/tasks/components/PriorityBadge";
 import { useStore } from "../store";
 import { fmtDateShort, isOverdue, relTime, statusMeta } from "../lib/data";
 import type { Route } from "../components/Shell";
@@ -109,7 +109,7 @@ export function Dashboard({ loading, go }: { loading: boolean; go: (r: Route) =>
               const actor = members.find((m) => m.id === n.actorId)!;
               return (
                 <div key={n.id} className="flex gap-3">
-                  <Avatar member={actor} size={30} />
+                  <Avatar name={actor.name} color={actor.color} size={30} />
                   <div className="min-w-0 flex-1">
                     <p className="text-[13px] leading-snug text-foreground">
                       <span className="font-medium">{actor.name}</span> {n.text}

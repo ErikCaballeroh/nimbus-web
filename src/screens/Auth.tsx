@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Field, Input, PasswordInput, Spinner } from "../components/ui";
-import { Icon } from "../components/icons";
+import { Button, Field, Icon, Input, PasswordInput, Spinner } from "../components/ui";
 import { useStore } from "../store";
 
 export type AuthView = "login" | "register" | "recover";

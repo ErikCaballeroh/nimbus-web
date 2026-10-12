@@ -167,10 +167,6 @@ export function memberById(id: string | null): Member | undefined {
   return members.find((m) => m.id === id);
 }
 
-export function initials(name: string): string {
-  return name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
-}
-
 export function fmtDate(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });

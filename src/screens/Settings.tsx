@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Icon } from "../components/icons";
-import { Avatar, Button, Card, Field, Input, PasswordInput, Select, Toggle } from "../components/ui";
+import { Avatar, Button, Card, Field, Icon, Input, PasswordInput, Select, Toggle } from "../components/ui";
 import { useStore } from "../store";
 import { members } from "../lib/data";
 
@@ -55,7 +54,7 @@ function Profile() {
     <div className="flex flex-col gap-5 animate-fade">
       <Section title="Información personal" desc="Actualiza tu foto de perfil y datos personales.">
         <div className="mb-6 flex items-center gap-4">
-          <Avatar member={me} size={64} />
+          <Avatar name={me.name} color={me.color} size={64} />
           <div className="flex gap-2">
             <Button variant="secondary" size="sm">Cambiar foto</Button>
             <Button variant="ghost" size="sm">Eliminar</Button>
