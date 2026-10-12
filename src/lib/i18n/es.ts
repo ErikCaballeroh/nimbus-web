@@ -1,7 +1,7 @@
 /**
  * Centralized Spanish UI dictionary. Screens are wired to this incrementally
  * (see docs/ROADMAP.md) — for now it covers the components/ui primitives
- * plus the enum label maps also used by the mock data in lib/data.ts.
+ * plus the enum label maps used across features/*.
  */
 export const es = {
   common: {
@@ -23,15 +23,15 @@ export const es = {
     },
     status: {
       todo: "Pendiente",
-      in_progress: "En Progreso",
+      in_progress: "En progreso",
       review: "Revisión",
       done: "Completado",
     },
     role: {
-      Propietario: "Propietario",
-      Administrador: "Administrador",
-      Editor: "Editor",
-      Lector: "Lector",
+      owner: "Propietario",
+      admin: "Administrador",
+      editor: "Editor",
+      viewer: "Lector",
     },
     notificationType: {
       assigned: "Asignaciones",

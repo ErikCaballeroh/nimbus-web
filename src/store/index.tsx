@@ -1,17 +1,14 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import {
-  projects as seedProjects,
-  tasks as seedTasks,
-  members as seedMembers,
-  notifications as seedNotifs,
-  type Project,
-  type Task,
-  type Member,
-  type Notification,
-  type Status,
-} from "../lib/data";
+import { members as seedMembers } from "../lib/mock/members";
+import { projects as seedProjects } from "../lib/mock/projects";
+import { tasks as seedTasks } from "../lib/mock/tasks";
+import { notifications as seedNotifs } from "../lib/mock/notifications";
+import type { Project } from "../features/projects/types";
+import type { Task, Status } from "../features/tasks/types";
+import type { Member } from "../features/members/types";
+import type { Notification } from "../features/notifications/types";
 
 type Theme = "light" | "dark";
 
