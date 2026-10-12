@@ -24,6 +24,7 @@ import {
   statusOrder,
   type Priority,
   type Project,
+  type Role,
   type Status,
   type Task,
 } from "../lib/data";
@@ -300,7 +301,7 @@ export function AddMemberModal({ open, onClose, projectId }: { open: boolean; on
   const { addMember } = useStore();
   const [q, setQ] = useState("");
   const [sel, setSel] = useState<(typeof directory)[0] | null>(null);
-  const [role, setRole] = useState("Editor");
+  const [role, setRole] = useState<Role>("Editor");
   const results = useMemo(
     () => directory.filter((d) => d.name.toLowerCase().includes(q.toLowerCase()) || d.email.includes(q.toLowerCase())),
     [q]
@@ -308,7 +309,7 @@ export function AddMemberModal({ open, onClose, projectId }: { open: boolean; on
 
   const invite = () => {
     if (!sel) return;
-    addMember({ name: sel.name, email: sel.email, role: role as any, color: sel.color }, projectId);
+    addMember({ name: sel.name, email: sel.email, role, color: sel.color }, projectId);
     onClose();
   };
 
@@ -352,7 +353,7 @@ export function AddMemberModal({ open, onClose, projectId }: { open: boolean; on
         </div>
         {sel && (
           <Field label="Rol">
-            <Select value={role} onChange={(e) => setRole(e.target.value)}>
+            <Select value={role} onChange={(e) => setRole(e.target.value as Role)}>
               {["Administrador", "Editor", "Lector"].map((r) => <option key={r}>{r}</option>)}
             </Select>
           </Field>

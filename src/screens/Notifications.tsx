@@ -6,7 +6,7 @@ import { Avatar, Button, Card, EmptyState } from "../components/ui";
 import { useStore } from "../store";
 import { relTime, type Notification } from "../lib/data";
 
-const typeMeta: Record<Notification["type"], { icon: any; tone: string; label: string }> = {
+const typeMeta: Record<Notification["type"], { icon: typeof Icon.user; tone: string; label: string }> = {
   assigned: { icon: Icon.user, tone: "var(--primary)", label: "Asignaciones" },
   comment: { icon: Icon.message, tone: "var(--info)", label: "Comentarios" },
   status: { icon: Icon.board, tone: "var(--success)", label: "Estados" },

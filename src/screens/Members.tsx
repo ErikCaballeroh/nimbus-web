@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "../components/icons";
-import { Avatar, Button, Card, IconButton, Select, useClickOutside } from "../components/ui";
+import { Avatar, Button, Card, IconButton, useClickOutside } from "../components/ui";
 import { AddMemberModal } from "../components/Modals";
 import { useStore } from "../store";
 import type { Role } from "../lib/data";
