@@ -1,26 +1,28 @@
 'use client';
 
 import { useState } from "react";
-import { Avatar, Button, Card, Icon, IconButton } from "../components/ui";
-import { useClickOutside } from "../hooks/useClickOutside";
-import { AddMemberModal } from "../components/Modals";
-import { useStore } from "../store";
-import type { Role } from "../lib/data";
+import { Avatar, Button, Card, Icon, IconButton } from "../../../components/ui";
+import { useClickOutside } from "../../../hooks/useClickOutside";
+import { es } from "../../../lib/i18n/es";
+import { useStore } from "../../../store";
+import type { Project } from "../../projects/types";
+import type { Role } from "../types";
+import { AddMemberModal } from "./AddMemberModal";
 
 const roleTone: Record<Role, string> = {
-  Propietario: "var(--primary)",
-  Administrador: "var(--info)",
-  Editor: "var(--success)",
-  Lector: "var(--muted-foreground)",
+  owner: "var(--primary)",
+  admin: "var(--info)",
+  editor: "var(--success)",
+  viewer: "var(--muted-foreground)",
 };
 
-export function Members({ projectId }: { projectId: string }) {
-  const { projects, members, updateProject } = useStore();
-  const project = projects.find((p) => p.id === projectId);
+const assignableRoles: Role[] = ["admin", "editor", "viewer"];
+
+export function MembersScreen({ project }: { project: Project }) {
+  const { members, updateProject } = useStore();
   const [adding, setAdding] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
   const menuRef = useClickOutside<HTMLDivElement>(() => setMenu(null));
-  if (!project) return null;
   const projMembers = members.filter((m) => project.memberIds.includes(m.id));
 
   const remove = (id: string) => {
@@ -50,22 +52,22 @@ export function Members({ projectId }: { projectId: string }) {
               className="hidden rounded-md px-2 py-1 text-xs font-medium sm:inline-block"
               style={{ color: roleTone[m.role], background: `color-mix(in srgb, ${roleTone[m.role]} 12%, transparent)` }}
             >
-              {m.role}
+              {es.enums.role[m.role]}
             </span>
             <div className="relative" ref={menu === m.id ? menuRef : undefined}>
-              <IconButton onClick={() => setMenu(menu === m.id ? null : m.id)} disabled={m.role === "Propietario"}>
+              <IconButton onClick={() => setMenu(menu === m.id ? null : m.id)} disabled={m.role === "owner"}>
                 <Icon.dots width={18} height={18} />
               </IconButton>
               {menu === m.id && (
                 <div className="animate-dropdown absolute right-0 top-10 z-40 w-52 rounded-lg border border-border bg-popover p-1.5 shadow-[var(--shadow-lg)]">
                   <div className="px-2 pb-1.5 pt-1 text-xs font-medium text-muted-foreground">Cambiar rol</div>
-                  {(["Administrador", "Editor", "Lector"] as Role[]).map((r) => (
+                  {assignableRoles.map((r) => (
                     <button
                       key={r}
                       onClick={() => { updateProject(project.id, {}); setMenu(null); }}
                       className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-[13px] text-foreground hover:bg-secondary"
                     >
-                      {r} {m.role === r && <Icon.check width={15} height={15} className="text-primary" />}
+                      {es.enums.role[r]} {m.role === r && <Icon.check width={15} height={15} className="text-primary" />}
                     </button>
                   ))}
                   <div className="my-1 border-t border-border" />
@@ -79,7 +81,7 @@ export function Members({ projectId }: { projectId: string }) {
         ))}
       </Card>
 
-      {adding && <AddMemberModal open onClose={() => setAdding(false)} projectId={projectId} />}
+      {adding && <AddMemberModal open onClose={() => setAdding(false)} projectId={project.id} />}
     </div>
   );
 }
