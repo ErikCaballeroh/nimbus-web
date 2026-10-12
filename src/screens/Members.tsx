@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Icon } from "../components/icons";
-import { Avatar, Button, Card, IconButton, useClickOutside } from "../components/ui";
+import { Avatar, Button, Card, Icon, IconButton } from "../components/ui";
+import { useClickOutside } from "../hooks/useClickOutside";
 import { AddMemberModal } from "../components/Modals";
 import { useStore } from "../store";
 import type { Role } from "../lib/data";
@@ -41,7 +41,7 @@ export function Members({ projectId }: { projectId: string }) {
       <Card className="divide-y divide-border">
         {projMembers.map((m) => (
           <div key={m.id} className="flex items-center gap-3.5 px-4 py-3.5">
-            <Avatar member={m} size={40} />
+            <Avatar name={m.name} color={m.color} size={40} />
             <div className="min-w-0 flex-1">
               <div className="text-sm font-medium text-foreground">{m.name}</div>
               <div className="truncate text-[13px] text-muted-foreground">{m.email}</div>
