@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, Icon } from "../ui";
 import { useStore } from "../../store";
+import { useCurrentUser } from "../../features/auth/CurrentUserContext";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: Icon.dashboard },
@@ -14,8 +15,8 @@ const nav = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { projects, members } = useStore();
-  const me = members[0];
+  const { projects } = useStore();
+  const me = useCurrentUser();
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-sidebar lg:flex">
@@ -63,7 +64,7 @@ export function Sidebar() {
 
       <div className="border-t border-border p-3">
         <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
-          <Avatar name={me.name} color={me.color} size={34} />
+          <Avatar name={me.name} color={me.avatarColor} size={34} />
           <div className="min-w-0 flex-1">
             <div className="truncate text-[13px] font-medium text-foreground">{me.name}</div>
             <div className="truncate text-xs text-muted-foreground">{me.email}</div>

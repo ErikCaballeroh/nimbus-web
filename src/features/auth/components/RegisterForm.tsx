@@ -4,43 +4,52 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Field, Input, PasswordInput, Spinner } from "../../../components/ui";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
 import { AuthHeader } from "./AuthShell";
 
 export function RegisterForm() {
   const router = useRouter();
-  const [f, setF] = useState({ name: "", email: "", pw: "", confirm: "" });
+  const [f, setF] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [err, setErr] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const n: Record<string, string> = {};
-    if (f.name.trim().length < 2) n.name = "Introduce tu nombre";
-    if (!f.email.includes("@")) n.email = "Correo no válido";
-    if (f.pw.length < 6) n.pw = "Mínimo 6 caracteres";
-    if (f.confirm !== f.pw) n.confirm = "Las contraseñas no coinciden";
-    setErr(n);
-    if (Object.keys(n).length) return;
+    setErr({});
     setLoading(true);
-    setTimeout(() => router.push("/dashboard"), 900);
+    try {
+      await apiFetch("/api/auth/register", { method: "POST", body: JSON.stringify(f) });
+      router.push("/dashboard");
+      router.refresh();
+    } catch (e) {
+      if (e instanceof ApiClientError) {
+        if (e.code === "VALIDATION_ERROR") setErr(fieldErrorsFromDetails(e.details));
+        else if (e.code === "CONFLICT") setErr({ email: e.message });
+        else setErr({ form: e.message });
+      } else {
+        setErr({ form: "Ha ocurrido un error inesperado." });
+      }
+      setLoading(false);
+    }
   };
 
-  const strength = Math.min(4, Math.floor(f.pw.length / 3));
+  const strength = Math.min(4, Math.floor(f.password.length / 3));
   return (
     <form onSubmit={submit}>
       <AuthHeader title="Crea tu cuenta" sub="Empieza gratis, sin tarjeta de crédito." />
       <div className="flex flex-col gap-4">
+        {err.form && <p className="text-[13px] text-danger">{err.form}</p>}
         <Field label="Nombre completo" error={err.name}>
           <Input value={f.name} onChange={set("name")} placeholder="Ana García" error={!!err.name} />
         </Field>
         <Field label="Correo electrónico" error={err.email}>
           <Input value={f.email} onChange={set("email")} placeholder="tu@empresa.com" error={!!err.email} />
         </Field>
-        <Field label="Contraseña" error={err.pw} hint={!err.pw ? "Usa 8+ caracteres con números" : undefined}>
-          <PasswordInput value={f.pw} onChange={set("pw")} placeholder="••••••••" error={!!err.pw} />
+        <Field label="Contraseña" error={err.password} hint={!err.password ? "Usa 8+ caracteres con números" : undefined}>
+          <PasswordInput value={f.password} onChange={set("password")} placeholder="••••••••" error={!!err.password} />
         </Field>
-        {f.pw && (
+        {f.password && (
           <div className="-mt-1 flex gap-1">
             {[0, 1, 2, 3].map((i) => (
               <span
@@ -51,8 +60,8 @@ export function RegisterForm() {
             ))}
           </div>
         )}
-        <Field label="Confirmar contraseña" error={err.confirm}>
-          <PasswordInput value={f.confirm} onChange={set("confirm")} placeholder="••••••••" error={!!err.confirm} />
+        <Field label="Confirmar contraseña" error={err.confirmPassword}>
+          <PasswordInput value={f.confirmPassword} onChange={set("confirmPassword")} placeholder="••••••••" error={!!err.confirmPassword} />
         </Field>
         <Button type="submit" size="lg" disabled={loading} className="mt-1 w-full">
           {loading ? <Spinner /> : "Crear cuenta"}

@@ -40,9 +40,36 @@ DATABASE_URL=$TEST_DATABASE_URL pnpm db:migrate
 
 ## 2. API
 
-Route handlers are added starting Phase 4 of `docs/ROADMAP.md`. This
-section will document every endpoint's method, path, request/response
-shape and status codes as each phase adds them.
+All routes are under the `/api` prefix. Every handler except the four
+marked **public** below requires a valid session (httpOnly cookie);
+without one they respond `401 UNAUTHORIZED`. Error responses always use
+the shape `{ "error": { "code", "message", "details"? } }` (see
+`CLAUDE.md`); validation errors are `422` with Zod issues in `details`.
+
+### Auth (`/api/auth`)
+
+| Method | Path                    | Auth   | Body                                              | Success           |
+| ------ | ------------------------ | ------ | -------------------------------------------------- | ------------------ |
+| POST   | `/auth/register`        | public | `{ name, email, password, confirmPassword }`      | `201` current user |
+| POST   | `/auth/login`           | public | `{ email, password }`                              | `200` current user |
+| POST   | `/auth/logout`          | session | —                                                  | `200 { ok: true }` |
+| POST   | `/auth/recover`         | public | `{ email }`                                       | `200 { ok: true }` (always, whether or not the email exists) |
+| POST   | `/auth/reset-password`  | public | `{ token, password, confirmPassword }`            | `200 { ok: true }`; `422` if the token is invalid, expired or already used |
+| GET    | `/auth/me`               | session | —                                                  | `200` current user |
+
+### Profile (`/api/me`)
+
+| Method | Path            | Body                                                | Success             |
+| ------ | ---------------- | ------------------------------------------------------ | --------------------- |
+| PATCH  | `/me`            | `{ name, email }`                                     | `200` current user; `409` if the email is taken |
+| PATCH  | `/me/password`   | `{ currentPassword, newPassword, confirmPassword }` | `200 { ok: true }`; `422` if `currentPassword` is wrong |
+| PATCH  | `/me/theme`      | `{ theme: "light" \| "dark" }`                        | `200` current user   |
+
+"Current user" is `{ id, name, email, avatarColor, theme }` — never `passwordHash` or any token.
+
+Password recovery: resetting creates a hashed (SHA-256), single-use
+token valid for 1 hour. In development the reset link is logged to the
+server console instead of emailed (`[dev] Reset link for <email>: /reset-password?token=...`).
 
 ## 3. Roles and permissions
 
