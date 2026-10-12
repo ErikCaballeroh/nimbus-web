@@ -1,5 +1,10 @@
-import { AuthRoute } from "@/src/components/AuthRoute";
+import { AuthShell } from "@/src/features/auth/components/AuthShell";
+import { RecoverForm } from "@/src/features/auth/components/RecoverForm";
 
-export default function ForgotPasswordPage() {
-    return <AuthRoute initialView="recover" />;
+export default function RecoverPage() {
+    return (
+        <AuthShell>
+            <RecoverForm />
+        </AuthShell>
+    );
 }
