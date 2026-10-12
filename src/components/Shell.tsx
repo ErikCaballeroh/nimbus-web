@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, type ReactNode } from "react";
-import { Icon } from "./icons";
-import { Avatar, IconButton, Tooltip, useClickOutside } from "./ui";
+import { Avatar, Icon, IconButton, Tooltip } from "./ui";
+import { useClickOutside } from "../hooks/useClickOutside";
 import { useStore } from "../store";
 import { members, relTime } from "../lib/data";
 
@@ -71,7 +71,7 @@ export function Sidebar({ route, go }: { route: Route; go: (r: Route) => void })
 
       <div className="border-t border-border p-3">
         <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
-          <Avatar member={members[0]} size={34} />
+          <Avatar name={members[0].name} color={members[0].color} size={34} />
           <div className="min-w-0 flex-1">
             <div className="truncate text-[13px] font-medium text-foreground">{members[0].name}</div>
             <div className="truncate text-xs text-muted-foreground">{members[0].email}</div>
@@ -153,7 +153,7 @@ export function Header({
                 const actor = members.find((m) => m.id === n.actorId)!;
                 return (
                   <div key={n.id} className={`flex gap-3 px-4 py-3 transition-colors hover:bg-secondary ${!n.read ? "bg-accent/40" : ""}`}>
-                    <Avatar member={actor} size={32} />
+                    <Avatar name={actor.name} color={actor.color} size={32} />
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] leading-snug text-foreground">
                         <span className="font-medium">{actor.name}</span> {n.text}
@@ -172,7 +172,7 @@ export function Header({
       {/* User */}
       <div className="relative" ref={userRef}>
         <button onClick={() => setOpenUser((o) => !o)} className="rounded-full transition-transform active:scale-95">
-          <Avatar member={members[0]} size={36} />
+          <Avatar name={members[0].name} color={members[0].color} size={36} />
         </button>
         {openUser && (
           <div className="animate-dropdown absolute right-0 top-12 z-50 w-56 overflow-hidden rounded-xl border border-border bg-popover py-1.5 shadow-[var(--shadow-lg)]">

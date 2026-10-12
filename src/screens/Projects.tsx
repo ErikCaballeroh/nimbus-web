@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { Icon } from "../components/icons";
-import { AvatarStack, Button, Card, EmptyState, IconButton, Progress, Skeleton, useClickOutside } from "../components/ui";
+import { AvatarStack, Button, Card, EmptyState, Icon, IconButton, Progress, Skeleton } from "../components/ui";
+import { useClickOutside } from "../hooks/useClickOutside";
 import { ProjectModal } from "../components/Modals";
 import { useStore } from "../store";
 import { fmtDate } from "../lib/data";
@@ -103,7 +103,7 @@ export function Projects({ loading, go }: { loading: boolean; go: (r: Route) => 
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3.5"><AvatarStack members={mem} size={28} /></td>
+                    <td className="px-4 py-3.5"><AvatarStack people={mem} size={28} /></td>
                     <td className="px-4 py-3.5 text-muted-foreground">{taskCount} tareas</td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
