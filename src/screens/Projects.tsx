@@ -153,7 +153,7 @@ function Th({ children, onClick, active, asc }: { children: React.ReactNode; onC
   );
 }
 
-function MenuItem({ icon: I, children, onClick, danger }: { icon: any; children: React.ReactNode; onClick: () => void; danger?: boolean }) {
+function MenuItem({ icon: I, children, onClick, danger }: { icon: typeof Icon.user; children: React.ReactNode; onClick: () => void; danger?: boolean }) {
   return (
     <button onClick={onClick} className={`flex w-full items-center gap-2.5 px-3 py-2 text-[13px] transition-colors ${danger ? "text-danger hover:bg-danger/8" : "text-foreground hover:bg-secondary"}`}>
       <I width={15} height={15} className={danger ? "" : "text-muted-foreground"} /> {children}
