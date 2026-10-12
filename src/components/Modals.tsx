@@ -1,20 +1,20 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { Icon } from "./icons";
 import {
   Avatar,
   Button,
   Field,
+  Icon,
   Input,
   Modal,
-  PriorityBadge,
   Select,
   Spinner,
-  StatusPill,
   Tag,
   Textarea,
 } from "./ui";
+import { PriorityBadge } from "../features/tasks/components/PriorityBadge";
+import { StatusPill } from "../features/tasks/components/StatusPill";
 import { useStore } from "../store";
 import {
   fmtDate,
@@ -214,7 +214,7 @@ export function TaskDetailModal({ task, onClose }: { task: Task | null; onClose:
                 const a = members.find((m) => m.id === c.authorId)!;
                 return (
                   <div key={c.id} className="flex gap-3">
-                    <Avatar member={a} size={30} />
+                    <Avatar name={a.name} color={a.color} size={30} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2">
                         <span className="text-[13px] font-medium text-foreground">{a.name}</span>
@@ -262,7 +262,7 @@ export function TaskDetailModal({ task, onClose }: { task: Task | null; onClose:
           <MetaRow label="Asignado a">
             {assignee ? (
               <div className="flex items-center gap-2">
-                <Avatar member={assignee} size={26} />
+                <Avatar name={assignee.name} color={assignee.color} size={26} />
                 <span className="text-[13px] text-foreground">{assignee.name}</span>
               </div>
             ) : (

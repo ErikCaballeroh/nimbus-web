@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Icon } from "../components/icons";
-import { Avatar, Button, IconButton, PriorityBadge, Skeleton, Tag, Tooltip } from "../components/ui";
+import { Avatar, Button, Icon, IconButton, Skeleton, Tag, Tooltip } from "../components/ui";
+import { PriorityBadge } from "../features/tasks/components/PriorityBadge";
 import { ExportModal, ImportModal, TaskDetailModal, TaskModal } from "../components/Modals";
 import { useStore } from "../store";
 import { fmtDateShort, isOverdue, statusMeta, statusOrder, type Status, type Task } from "../lib/data";
@@ -98,7 +98,7 @@ export function Board({ projectId, loading }: { projectId: string; loading: bool
                             {t.comments.length > 0 && (
                               <span className="inline-flex items-center gap-0.5 text-xs"><Icon.message width={13} height={13} /> {t.comments.length}</span>
                             )}
-                            {assignee ? <Avatar member={assignee} size={24} /> : <span className="h-6 w-6 rounded-full border border-dashed border-border-strong" />}
+                            {assignee ? <Avatar name={assignee.name} color={assignee.color} size={24} /> : <span className="h-6 w-6 rounded-full border border-dashed border-border-strong" />}
                           </div>
                         </div>
                       </article>

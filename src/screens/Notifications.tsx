@@ -1,8 +1,7 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { Icon } from "../components/icons";
-import { Avatar, Button, Card, EmptyState } from "../components/ui";
+import { Avatar, Button, Card, EmptyState, Icon } from "../components/ui";
 import { useStore } from "../store";
 import { relTime, type Notification } from "../lib/data";
 
@@ -68,7 +67,7 @@ export function Notifications() {
             return (
               <div key={n.id} className={`flex items-start gap-3.5 px-4 py-4 transition-colors hover:bg-secondary/40 ${!n.read ? "bg-accent/30" : ""}`}>
                 <div className="relative">
-                  <Avatar member={actor} size={38} />
+                  <Avatar name={actor.name} color={actor.color} size={38} />
                   <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full ring-2 ring-card" style={{ background: tm.tone }}>
                     <tm.icon width={11} height={11} className="text-white" />
                   </span>
