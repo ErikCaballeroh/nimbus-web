@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { Avatar, Button, Card, EmptyState, Icon } from "../components/ui";
-import { useStore } from "../store";
-import { relTime, type Notification } from "../lib/data";
+import { Avatar, Button, Card, EmptyState, Icon } from "../../../components/ui";
+import { relTime } from "../../../lib/utils";
+import { useStore } from "../../../store";
+import type { NotificationType } from "../types";
 
-const typeMeta: Record<Notification["type"], { icon: typeof Icon.user; tone: string; label: string }> = {
+const typeMeta: Record<NotificationType, { icon: typeof Icon.user; tone: string; label: string }> = {
   assigned: { icon: Icon.user, tone: "var(--primary)", label: "Asignaciones" },
   comment: { icon: Icon.message, tone: "var(--info)", label: "Comentarios" },
   status: { icon: Icon.board, tone: "var(--success)", label: "Estados" },
@@ -21,7 +22,7 @@ const filters = [
   { key: "status", label: "Estados" },
 ] as const;
 
-export function Notifications() {
+export function NotificationsScreen() {
   const { notifications, members, markAllRead, toggleRead } = useStore();
   const [filter, setFilter] = useState<string>("all");
 
