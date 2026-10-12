@@ -10,31 +10,41 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:integration": "vitest run -c vitest.integration.config.ts",
     "test:e2e": "playwright test",
-    "db:up": "echo \"db:up will be available from Phase 3 (Postgres + Prisma)\"",
-    "db:migrate": "echo \"db:migrate will be available from Phase 3 (Postgres + Prisma)\"",
-    "db:seed": "echo \"db:seed will be available from Phase 3 (Postgres + Prisma)\""
+    "postinstall": "prisma generate",
+    "db:up": "docker compose up -d postgres",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "7.10.0",
+    "bcrypt": "^6.0.0",
     "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/react": "^16.1.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.7",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "jsdom": "^25.0.1",
     "prettier": "^3.4.2",
+    "prisma": "7.10.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^2.1.8"
   },
-  "packageManager": "pnpm@12.3.4"
+  "packageManager": "pnpm@12.11.2"
 }
