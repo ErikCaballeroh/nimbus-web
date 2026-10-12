@@ -12,7 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { Icon } from "../components/icons";
-import { Avatar, Card, PriorityBadge, Progress, Skeleton } from "../components/ui";
+import { Avatar, Card, PriorityBadge, Skeleton } from "../components/ui";
 import { useStore } from "../store";
 import { fmtDateShort, isOverdue, relTime, statusMeta } from "../lib/data";
 import type { Route } from "../components/Shell";
@@ -59,7 +59,7 @@ export function Dashboard({ loading, go }: { loading: boolean; go: (r: Route) =>
     <div className="mx-auto max-w-7xl px-5 py-6 sm:px-6">
       {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {kpis.map((k, i) => (
+        {kpis.map((k) => (
           <Card key={k.label} className="animate-rise p-5" >
             <div className="flex items-start justify-between">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: `color-mix(in srgb, ${k.tone} 14%, transparent)`, color: k.tone }}>

@@ -8,7 +8,7 @@ import { members } from "../lib/data";
 
 type Tab = "profile" | "preferences" | "security";
 
-const tabs: { key: Tab; label: string; icon: any }[] = [
+const tabs: { key: Tab; label: string; icon: typeof Icon.user }[] = [
   { key: "profile", label: "Perfil", icon: Icon.user },
   { key: "preferences", label: "Preferencias", icon: Icon.settings },
   { key: "security", label: "Seguridad", icon: Icon.shield },
@@ -123,7 +123,7 @@ function Preferences() {
                 <div className="text-[13px] font-medium text-foreground">{row.label}</div>
                 <div className="text-xs text-muted-foreground">{row.desc}</div>
               </div>
-              <Toggle checked={(prefs as any)[row.key]} onChange={(v) => setPrefs({ ...prefs, [row.key]: v })} />
+              <Toggle checked={prefs[row.key as keyof typeof prefs]} onChange={(v) => setPrefs({ ...prefs, [row.key]: v })} />
             </div>
           ))}
         </div>
