@@ -138,6 +138,43 @@ never changes.
 
 Tags are a global catalog shared by all projects, not scoped per project.
 
+### Import and export (`/api/projects/:id/tasks/import`, `/api/projects/:id/tasks/export`)
+
+| Method | Path                                  | Min. role | Body                            | Success |
+| ------ | ----------------------------------------- | --------- | ----------------------------------- | -------- |
+| POST   | `/projects/:id/tasks/import/preview`      | editor    | multipart: `file` (`.csv`/`.xlsx`) | `200 { rows, validCount, invalidCount }`, writes nothing |
+| POST   | `/projects/:id/tasks/import`              | editor    | multipart: `file` (`.csv`/`.xlsx`) | `200 { imported, skipped, errors: { row, message }[] }` |
+| GET    | `/projects/:id/tasks/export`              | editor    | query: `format` (`csv`\|`xlsx`)    | file download, `Content-Disposition: attachment` |
+
+Import columns, in order, with Spanish headers in the file and English keys
+in code: `titulo` (required), `descripcion`, `estado`, `prioridad`,
+`responsable` (email of a project member), `fecha_limite` (`YYYY-MM-DD`),
+`etiquetas` (comma-separated tag names, created on the fly if they don't
+exist yet). `estado`/`prioridad` accept the Spanish labels shown in the UI
+(`Pendiente`, `En progreso`, `Revisión`, `Completado`; `Baja`, `Media`,
+`Alta`, `Urgente`); an unrecognized value is a per-row validation error, not
+a silent default.
+
+Files over 5 MB, over 1,000 rows, or with an extension other than `.csv`/
+`.xlsx` are rejected outright (`422`) before any row is parsed.
+
+`/import/preview` validates every row (shape, enum values, and whether
+`responsable` resolves to an existing user who is a project member) without
+writing anything. `/import` re-validates independently from scratch (never
+trusts the client's preview result) and inserts every valid row in a single
+transaction, reusing the same per-project `task_seq` counter as
+`POST /projects/:id/tasks`; a newly-assigned row triggers the same
+`assigned` notification as a normal task creation. Rows that fail
+validation are skipped and reported in `errors`, keyed by their 1-based row
+number (header = row 1).
+
+`/export` reads the project's tasks straight from the database (not from
+whatever is currently rendered on the board) and writes the same 7 columns
+as import, so an exported file can be re-imported unchanged (round-trip).
+
+A blank template (header row only) is available as a static file at
+`/templates/plantilla-tareas.xlsx` / `.csv`, linked from the Import modal.
+
 ### Users and team
 
 | Method | Path                | Auth    | Body | Success |

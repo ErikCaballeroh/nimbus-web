@@ -2,18 +2,45 @@
 
 import { useState } from "react";
 import { Button, Field, Icon, Modal, Spinner } from "@/components/ui";
+import { ApiClientError } from "@/lib/apiClient";
 
-export function ExportModal({ open, onClose, count }: { open: boolean; onClose: () => void; count: number }) {
-  const [format, setFormat] = useState("xlsx");
-  const [phase, setPhase] = useState<"config" | "loading" | "done">("config");
-  const fields = ["Título", "Estado", "Prioridad", "Asignado", "Fecha límite", "Comentarios"];
-  const [checked, setChecked] = useState<string[]>(fields.slice(0, 5));
+export function ExportModal({
+  open,
+  onClose,
+  count,
+  projectId,
+}: {
+  open: boolean;
+  onClose: () => void;
+  count: number;
+  projectId: string;
+}) {
+  const [format, setFormat] = useState<"xlsx" | "csv">("xlsx");
+  const [phase, setPhase] = useState<"config" | "loading" | "done" | "error">("config");
+  const [error, setError] = useState("");
 
-  const run = () => {
+  const run = async () => {
     setPhase("loading");
-    setTimeout(() => setPhase("done"), 1200);
+    try {
+      const res = await fetch(`/api/projects/${projectId}/tasks/export?format=${format}`);
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        throw new ApiClientError(json?.error?.code ?? "INTERNAL", json?.error?.message ?? "Ha ocurrido un error inesperado.");
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tareas-nimbus.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setPhase("done");
+    } catch (err) {
+      setError(err instanceof ApiClientError ? err.message : "Ha ocurrido un error inesperado.");
+      setPhase("error");
+    }
   };
-  const close = () => { setPhase("config"); onClose(); };
+  const close = () => { setPhase("config"); setError(""); onClose(); };
 
   return (
     <Modal
@@ -42,44 +69,33 @@ export function ExportModal({ open, onClose, count }: { open: boolean; onClose: 
           <h3 className="text-[15px] font-semibold text-foreground">Archivo generado</h3>
           <p className="mt-1 text-sm text-muted-foreground">tareas-nimbus.{format} ({count} filas) se ha descargado.</p>
         </div>
-      ) : (
-        <div className="flex flex-col gap-5">
-          <Field label="Formato de archivo">
-            <div className="grid grid-cols-3 gap-2.5">
-              {[
-                { id: "xlsx", label: "Excel", ext: ".xlsx" },
-                { id: "csv", label: "CSV", ext: ".csv" },
-                { id: "pdf", label: "PDF", ext: ".pdf" },
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setFormat(f.id)}
-                  className={`flex flex-col items-center gap-1.5 rounded-lg border px-3 py-4 transition-all active:scale-[0.97] ${format === f.id ? "border-primary bg-accent" : "border-border-strong hover:bg-secondary"
-                    }`}
-                >
-                  <Icon.file width={22} height={22} className={format === f.id ? "text-primary" : "text-muted-foreground"} />
-                  <span className="text-[13px] font-medium text-foreground">{f.label}</span>
-                  <span className="text-xs text-muted-foreground">{f.ext}</span>
-                </button>
-              ))}
-            </div>
-          </Field>
-          <Field label="Columnas a incluir">
-            <div className="grid grid-cols-2 gap-2">
-              {fields.map((f) => (
-                <label key={f} className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground hover:bg-secondary">
-                  <input
-                    type="checkbox"
-                    checked={checked.includes(f)}
-                    onChange={(e) => setChecked((c) => e.target.checked ? [...c, f] : c.filter((x) => x !== f))}
-                    className="h-4 w-4 accent-[var(--primary)]"
-                  />
-                  {f}
-                </label>
-              ))}
-            </div>
-          </Field>
+      ) : phase === "error" ? (
+        <div className="flex flex-col items-center py-10 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-danger/12 text-danger">
+            <Icon.alert width={30} height={30} />
+          </div>
+          <p className="text-sm text-foreground">{error}</p>
         </div>
+      ) : (
+        <Field label="Formato de archivo">
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              { id: "xlsx" as const, label: "Excel", ext: ".xlsx" },
+              { id: "csv" as const, label: "CSV", ext: ".csv" },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFormat(f.id)}
+                className={`flex flex-col items-center gap-1.5 rounded-lg border px-3 py-4 transition-all active:scale-[0.97] ${format === f.id ? "border-primary bg-accent" : "border-border-strong hover:bg-secondary"
+                  }`}
+              >
+                <Icon.file width={22} height={22} className={format === f.id ? "text-primary" : "text-muted-foreground"} />
+                <span className="text-[13px] font-medium text-foreground">{f.label}</span>
+                <span className="text-xs text-muted-foreground">{f.ext}</span>
+              </button>
+            ))}
+          </div>
+        </Field>
       )}
     </Modal>
   );

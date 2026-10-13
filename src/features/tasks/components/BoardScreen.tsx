@@ -121,8 +121,13 @@ export function BoardScreen({
         onClose={() => setDetailId(null)}
         onChanged={() => router.refresh()}
       />
-      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={tasks.length} />
-      <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
+      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={tasks.length} projectId={project.id} />
+      <ImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        projectId={project.id}
+        onImported={() => router.refresh()}
+      />
       {error && <Toast message={error} onDismiss={() => setError("")} />}
     </div>
   );
