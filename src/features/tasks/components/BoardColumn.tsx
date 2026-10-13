@@ -64,14 +64,20 @@ export function BoardColumn({
           />
         ))}
 
-        {tasks.length === 0 && canEdit && (
-          <button
-            onClick={onCreateTask}
-            className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-border-strong py-8 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          >
-            <Icon.plus width={18} height={18} />
-            Añadir tarea
-          </button>
+        {tasks.length === 0 && (
+          canEdit ? (
+            <button
+              onClick={onCreateTask}
+              className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-border-strong py-8 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              <Icon.plus width={18} height={18} />
+              Añadir tarea
+            </button>
+          ) : (
+            <div className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-border py-8 text-xs text-muted-foreground">
+              Sin tareas
+            </div>
+          )
         )}
       </div>
     </div>
