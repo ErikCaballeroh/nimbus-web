@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Field, Input, Modal, Textarea } from "../../../components/ui";
-import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
-import type { ProjectListItem } from "../types";
+import { Button, Field, Input, Modal, Textarea } from "@/components/ui";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
+import type { ProjectListItem } from "@/features/projects/types";
 
 const palette = ["#4f46e5", "#0891b2", "#db2777", "#16a34a", "#ea580c", "#7c3aed"];
 

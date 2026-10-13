@@ -1,4 +1,4 @@
-import { Card, Icon } from "../../../components/ui";
+import { Card, Icon } from "@/components/ui";
 
 export function StatCard({
   label,

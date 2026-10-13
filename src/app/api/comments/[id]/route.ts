@@ -1,6 +1,6 @@
-import { apiError, apiOk, errorResponse } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
-import { deleteComment } from "../../../../features/comments/service";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { deleteComment } from "@/features/comments/service";
 
 type Params = { params: Promise<{ id: string }> };
 

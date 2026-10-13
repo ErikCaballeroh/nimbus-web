@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Avatar, Icon } from "../ui";
-import { useCurrentUser } from "../../features/auth/CurrentUserContext";
-import type { ProjectListItem } from "../../features/projects/types";
+import { Avatar, Icon } from "@/components/ui";
+import { useCurrentUser } from "@/features/auth/CurrentUserContext";
+import type { ProjectListItem } from "@/features/projects/types";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: Icon.dashboard },

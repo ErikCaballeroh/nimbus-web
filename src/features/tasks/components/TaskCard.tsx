@@ -1,6 +1,6 @@
-import { Avatar, Icon, Tag } from "../../../components/ui";
-import { fmtDateShort, isOverdue } from "../../../lib/utils";
-import type { Task } from "../types";
+import { Avatar, Icon, Tag } from "@/components/ui";
+import { fmtDateShort, isOverdue } from "@/lib/utils";
+import type { Task } from "@/features/tasks/types";
 import { PriorityBadge } from "./PriorityBadge";
 
 export function TaskCard({

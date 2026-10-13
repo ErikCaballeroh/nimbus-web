@@ -1,6 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
-import { apiError, apiOk, errorResponse } from "../../../../lib/api";
-import { sendDueReminders } from "../../../../features/notifications/service";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { sendDueReminders } from "@/features/notifications/service";
 
 function isValidCronSecret(provided: string | null): boolean {
   const expected = process.env.CRON_SECRET;

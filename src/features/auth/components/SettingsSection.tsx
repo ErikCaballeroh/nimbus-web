@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Card } from "../../../components/ui";
+import { Card } from "@/components/ui";
 
 export function SettingsSection({ title, desc, children }: { title: string; desc: string; children: ReactNode }) {
   return (

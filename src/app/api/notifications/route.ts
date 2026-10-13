@@ -1,6 +1,6 @@
-import { apiError, apiOk, errorResponse } from "../../../lib/api";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { listNotificationsForUser } from "../../../features/notifications/queries";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { listNotificationsForUser } from "@/features/notifications/queries";
 
 export async function GET() {
   try {

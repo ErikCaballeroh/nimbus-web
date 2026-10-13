@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Field, Icon, Input, Spinner } from "../../../components/ui";
-import { apiFetch } from "../../../lib/apiClient";
+import { Button, Field, Icon, Input, Spinner } from "@/components/ui";
+import { apiFetch } from "@/lib/apiClient";
 import { AuthHeader } from "./AuthShell";
 
 export function RecoverForm() {

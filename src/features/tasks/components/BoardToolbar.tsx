@@ -1,5 +1,5 @@
-import { Button, Icon } from "../../../components/ui";
-import type { Project } from "../../projects/types";
+import { Button, Icon } from "@/components/ui";
+import type { Project } from "@/features/projects/types";
 
 export function BoardToolbar({
   project,

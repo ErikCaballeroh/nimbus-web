@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorState } from "@/src/components/ui";
+import { ErrorState } from "@/components/ui";
 
 export default function AuthError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
     return (

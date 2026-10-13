@@ -2,12 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import type { CurrentUser } from "../../features/auth/types";
-import type { ProjectListItem } from "../../features/projects/types";
-import type { Notification } from "../../features/notifications/types";
-import { CurrentUserProvider } from "../../features/auth/CurrentUserContext";
-import { ThemeProvider } from "../providers/ThemeProvider";
-import { StoreProvider } from "../../store";
+import type { CurrentUser } from "@/features/auth/types";
+import type { ProjectListItem } from "@/features/projects/types";
+import type { Notification } from "@/features/notifications/types";
+import { CurrentUserProvider } from "@/features/auth/CurrentUserContext";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { StoreProvider } from "@/store";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 

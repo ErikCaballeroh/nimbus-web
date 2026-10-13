@@ -7,7 +7,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Card } from "../../../components/ui";
+import { Card } from "@/components/ui";
 import { chartColors, tooltipStyle } from "./chartTheme";
 
 const burndown = [

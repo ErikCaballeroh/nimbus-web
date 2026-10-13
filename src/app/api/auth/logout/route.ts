@@ -1,6 +1,6 @@
-import { apiError, apiOk, errorResponse } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
-import { destroySession } from "../../../../lib/auth/session";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { destroySession } from "@/lib/auth/session";
 
 export async function POST() {
   try {

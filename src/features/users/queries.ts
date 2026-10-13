@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
 import type { UserSummary } from "./types";
 
 const userSummarySelect = { id: true, name: true, email: true, avatarColor: true } as const;

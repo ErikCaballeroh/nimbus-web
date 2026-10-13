@@ -1,9 +1,9 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { assertProjectRole, PROJECT_ACTION_MIN_ROLE, type Role } from "../../lib/permissions";
-import { es } from "../../lib/i18n/es";
-import { notify } from "../notifications/service";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { assertProjectRole, PROJECT_ACTION_MIN_ROLE, type Role } from "@/lib/permissions";
+import { es } from "@/lib/i18n/es";
+import { notify } from "@/features/notifications/service";
 import type { AddMemberInput } from "./schemas";
 
 export async function addMember(actorId: string, projectId: string, input: AddMemberInput): Promise<void> {

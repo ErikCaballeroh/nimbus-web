@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { Icon } from "./Icon";
-import { es } from "../../lib/i18n/es";
+import { es } from "@/lib/i18n/es";
 
 export function Toast({ message, onDismiss }: { message: string; onDismiss: () => void }) {
   useEffect(() => {

@@ -1,8 +1,8 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "../../lib/permissions";
-import type { Prisma } from "../../generated/prisma";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "@/lib/permissions";
+import type { Prisma } from "@/generated/prisma";
 import type { Task } from "./types";
 import type { TaskFilters } from "./schemas";
 

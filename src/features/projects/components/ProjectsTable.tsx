@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { AvatarStack, Card, Icon, IconButton, Progress } from "../../../components/ui";
-import { useClickOutside } from "../../../hooks/useClickOutside";
-import { fmtDate } from "../../../lib/utils";
-import type { ProjectListItem, ProjectMemberSummary } from "../types";
+import { AvatarStack, Card, Icon, IconButton, Progress } from "@/components/ui";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { fmtDate } from "@/lib/utils";
+import type { ProjectListItem, ProjectMemberSummary } from "@/features/projects/types";
 import { ProjectRowMenu } from "./ProjectRowMenu";
 
 export type SortKey = "name" | "progress" | "end";

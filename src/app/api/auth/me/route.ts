@@ -1,5 +1,5 @@
-import { apiError, apiOk, errorResponse } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
 
 export async function GET() {
   try {

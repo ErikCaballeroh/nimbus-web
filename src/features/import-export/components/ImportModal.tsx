@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Icon, Modal } from "../../../components/ui";
-import { PriorityBadge } from "../../tasks/components/PriorityBadge";
-import { StatusPill } from "../../tasks/components/StatusPill";
-import type { Priority, Status } from "../../tasks/types";
+import { Button, Icon, Modal } from "@/components/ui";
+import { PriorityBadge } from "@/features/tasks/components/PriorityBadge";
+import { StatusPill } from "@/features/tasks/components/StatusPill";
+import type { Priority, Status } from "@/features/tasks/types";
 
 // Preview-only for now: real parsing, validation and persistence land in
 // Phase 8 (import/export). This shows the intended flow without writing

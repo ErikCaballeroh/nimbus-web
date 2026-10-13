@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, Button, Field, Input } from "../../../components/ui";
-import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
-import { useCurrentUser } from "../CurrentUserContext";
+import { Avatar, Button, Field, Input } from "@/components/ui";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
+import { useCurrentUser } from "@/features/auth/CurrentUserContext";
 import { SettingsSection } from "./SettingsSection";
 
 export function ProfileTab() {

@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-import { members as seedMembers } from "../lib/mock/members";
-import { projects as seedProjects } from "../lib/mock/projects";
-import { tasks as seedTasks } from "../lib/mock/tasks";
-import { notifications as seedNotifs } from "../lib/mock/notifications";
-import type { MockProject, MockMember, MockTask, MockNotification } from "../lib/mock/types";
+import { members as seedMembers } from "@/lib/mock/members";
+import { projects as seedProjects } from "@/lib/mock/projects";
+import { tasks as seedTasks } from "@/lib/mock/tasks";
+import { notifications as seedNotifs } from "@/lib/mock/notifications";
+import type { MockProject, MockMember, MockTask, MockNotification } from "@/lib/mock/types";
 
 // Nothing reads this store anymore as of phase 7 (Dashboard/Header/
 // Notifications all moved to real data); kept only because phase 9 is where

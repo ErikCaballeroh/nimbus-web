@@ -1,5 +1,5 @@
-import { Skeleton } from "@/src/components/ui";
-import { statusOrder } from "@/src/features/tasks/types";
+import { Skeleton } from "@/components/ui";
+import { statusOrder } from "@/features/tasks/types";
 
 export default function BoardLoading() {
     return (

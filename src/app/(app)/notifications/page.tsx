@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { listNotificationsForUser } from "../../../features/notifications/queries";
-import { NotificationsScreen } from "../../../features/notifications/components/NotificationsScreen";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { listNotificationsForUser } from "@/features/notifications/queries";
+import { NotificationsScreen } from "@/features/notifications/components/NotificationsScreen";
 
 export default async function NotificationsPage() {
     const user = await getCurrentUser();

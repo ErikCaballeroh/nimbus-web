@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db";
 import type { Notification } from "./types";
 
 const MAX_NOTIFICATIONS = 100;

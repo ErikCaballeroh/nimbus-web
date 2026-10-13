@@ -1,7 +1,7 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { statusOrder, type Priority, type Status } from "../tasks/types";
-import { listProjectsForUser } from "../projects/queries";
+import { db } from "@/lib/db";
+import { statusOrder, type Priority, type Status } from "@/features/tasks/types";
+import { listProjectsForUser } from "@/features/projects/queries";
 import type { DashboardSummary } from "./types";
 
 const priorityOrder: Priority[] = ["low", "medium", "high", "urgent"];

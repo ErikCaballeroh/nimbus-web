@@ -1,6 +1,6 @@
 import { Icon } from "./Icon";
 import { Button } from "./Button";
-import { es } from "../../lib/i18n/es";
+import { es } from "@/lib/i18n/es";
 
 export function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (

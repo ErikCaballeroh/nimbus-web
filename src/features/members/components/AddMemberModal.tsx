@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Field, Icon, Input, Modal, Select } from "../../../components/ui";
-import { es } from "../../../lib/i18n/es";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import type { UserSummary } from "../../users/types";
-import type { Role } from "../types";
+import { Button, Field, Icon, Input, Modal, Select } from "@/components/ui";
+import { es } from "@/lib/i18n/es";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import type { UserSummary } from "@/features/users/types";
+import type { Role } from "@/features/members/types";
 
 const assignableRoles: Exclude<Role, "owner">[] = ["admin", "editor", "viewer"];
 

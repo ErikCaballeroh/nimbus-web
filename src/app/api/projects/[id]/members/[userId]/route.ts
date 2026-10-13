@@ -1,7 +1,7 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../../../lib/api";
-import { getCurrentUser } from "../../../../../../lib/auth/dal";
-import { changeMemberRoleSchema } from "../../../../../../features/members/schemas";
-import { changeMemberRole, removeMember } from "../../../../../../features/members/service";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { changeMemberRoleSchema } from "@/features/members/schemas";
+import { changeMemberRole, removeMember } from "@/features/members/service";
 
 type Params = { params: Promise<{ id: string; userId: string }> };
 

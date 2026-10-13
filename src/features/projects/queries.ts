@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
 import type { Project, ProjectListItem } from "./types";
 
 export async function listProjectsForUser(userId: string): Promise<ProjectListItem[]> {

@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
-import { db } from "../../lib/db";
-import type { ApiError } from "../../lib/api";
-import { createProject } from "../projects/service";
-import { createTask, updateTaskStatus } from "../tasks/service";
-import { addComment } from "../comments/service";
-import { addMember } from "../members/service";
+import { db } from "@/lib/db";
+import type { ApiError } from "@/lib/api";
+import { createProject } from "@/features/projects/service";
+import { createTask, updateTaskStatus } from "@/features/tasks/service";
+import { addComment } from "@/features/comments/service";
+import { addMember } from "@/features/members/service";
 import { markAllNotificationsRead, markNotificationRead, notify, sendDueReminders } from "./service";
 
 async function createUser() {

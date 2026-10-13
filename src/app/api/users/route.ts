@@ -1,6 +1,6 @@
-import { apiError, apiOk, errorResponse } from "../../../lib/api";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { searchUsers } from "../../../features/users/queries";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { searchUsers } from "@/features/users/queries";
 
 export async function GET(request: Request) {
   try {

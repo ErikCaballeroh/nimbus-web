@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db";
 import type { TeamMember } from "./types";
 
 /** Users who share at least one project with `userId`, with their total project and task counts. */

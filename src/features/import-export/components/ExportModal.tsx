@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Field, Icon, Modal, Spinner } from "../../../components/ui";
+import { Button, Field, Icon, Modal, Spinner } from "@/components/ui";
 
 export function ExportModal({ open, onClose, count }: { open: boolean; onClose: () => void; count: number }) {
   const [format, setFormat] = useState("xlsx");

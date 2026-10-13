@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from "react";
-import { Avatar, Button, Icon, Input, Modal, Select, Tag } from "../../../components/ui";
-import { es } from "../../../lib/i18n/es";
-import { fmtDate, relTime } from "../../../lib/utils";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import { useCurrentUser } from "../../auth/CurrentUserContext";
-import type { Comment } from "../../comments/types";
-import type { Tag as TagType } from "../../tags/types";
-import { statusOrder, type Priority, type Status, type Task } from "../types";
+import { Avatar, Button, Icon, Input, Modal, Select, Tag } from "@/components/ui";
+import { es } from "@/lib/i18n/es";
+import { fmtDate, relTime } from "@/lib/utils";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import { useCurrentUser } from "@/features/auth/CurrentUserContext";
+import type { Comment } from "@/features/comments/types";
+import type { Tag as TagType } from "@/features/tags/types";
+import { statusOrder, type Priority, type Status, type Task } from "@/features/tasks/types";
 
 function MetaRow({ label, children }: { label: string; children: ReactNode }) {
   return (

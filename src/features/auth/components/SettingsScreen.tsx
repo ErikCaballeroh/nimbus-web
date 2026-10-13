@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Icon } from "../../../components/ui";
+import { Icon } from "@/components/ui";
 import { ProfileTab } from "./ProfileTab";
 import { PreferencesTab } from "./PreferencesTab";
 import { SecurityTab } from "./SecurityTab";

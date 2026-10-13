@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "../../lib/db";
+import { db } from "@/lib/db";
 import type { Tag } from "./types";
 
 export async function listTags(): Promise<Tag[]> {

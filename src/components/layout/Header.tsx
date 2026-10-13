@@ -3,12 +3,12 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Avatar, Icon, IconButton, Tooltip } from "../ui";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { useTheme } from "../providers/ThemeProvider";
-import { useCurrentUser } from "../../features/auth/CurrentUserContext";
-import { relTime } from "../../lib/utils";
-import type { Notification } from "../../features/notifications/types";
+import { Avatar, Icon, IconButton, Tooltip } from "@/components/ui";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import { useCurrentUser } from "@/features/auth/CurrentUserContext";
+import { relTime } from "@/lib/utils";
+import type { Notification } from "@/features/notifications/types";
 
 export function Header({
   title,

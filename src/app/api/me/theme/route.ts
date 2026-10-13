@@ -1,7 +1,7 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
-import { updateThemeSchema } from "../../../../features/auth/schemas";
-import { updateTheme } from "../../../../features/auth/service";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { updateThemeSchema } from "@/features/auth/schemas";
+import { updateTheme } from "@/features/auth/service";
 
 export async function PATCH(request: Request) {
   try {

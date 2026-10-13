@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
 import type { Tag } from "./types";
 import type { CreateTagInput } from "./schemas";
 

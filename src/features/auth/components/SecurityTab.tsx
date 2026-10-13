@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Field, Icon, PasswordInput } from "../../../components/ui";
-import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
+import { Button, Field, Icon, PasswordInput } from "@/components/ui";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
 import { SettingsSection } from "./SettingsSection";
 
 const sessions = [

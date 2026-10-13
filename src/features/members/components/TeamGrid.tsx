@@ -1,5 +1,5 @@
-import { Card } from "../../../components/ui";
-import type { TeamMember } from "../../team/types";
+import { Card } from "@/components/ui";
+import type { TeamMember } from "@/features/team/types";
 
 export function TeamGrid({ team }: { team: TeamMember[] }) {
   return (

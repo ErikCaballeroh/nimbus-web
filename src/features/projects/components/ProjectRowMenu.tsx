@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
-import { Icon } from "../../../components/ui";
-import { hasRole, type Role } from "../../../lib/roles";
+import { Icon } from "@/components/ui";
+import { hasRole, type Role } from "@/lib/roles";
 
 function MenuItem({ icon: I, children, onClick, danger }: { icon: typeof Icon.user; children: React.ReactNode; onClick: () => void; danger?: boolean }) {
   return (

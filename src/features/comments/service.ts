@@ -1,9 +1,9 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "../../lib/permissions";
-import { es } from "../../lib/i18n/es";
-import { notify } from "../notifications/service";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "@/lib/permissions";
+import { es } from "@/lib/i18n/es";
+import { notify } from "@/features/notifications/service";
 import { listCommentsForTask } from "./queries";
 import type { Comment } from "./types";
 import type { CreateCommentInput } from "./schemas";

@@ -1,8 +1,8 @@
-import { Card, EmptyState, Icon } from "../../../components/ui";
-import { fmtDateShort } from "../../../lib/utils";
-import { PriorityBadge } from "../../tasks/components/PriorityBadge";
-import { statusAccent } from "../../tasks/types";
-import type { UpcomingTask } from "../types";
+import { Card, EmptyState, Icon } from "@/components/ui";
+import { fmtDateShort } from "@/lib/utils";
+import { PriorityBadge } from "@/features/tasks/components/PriorityBadge";
+import { statusAccent } from "@/features/tasks/types";
+import type { UpcomingTask } from "@/features/dashboard/types";
 
 export function UpcomingTasksCard({ tasks }: { tasks: UpcomingTask[] }) {
   return (

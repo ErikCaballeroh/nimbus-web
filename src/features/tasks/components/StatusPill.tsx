@@ -1,5 +1,5 @@
-import { es } from "../../../lib/i18n/es";
-import { statusAccent, type Status } from "../types";
+import { es } from "@/lib/i18n/es";
+import { statusAccent, type Status } from "@/features/tasks/types";
 
 export function StatusPill({ status }: { status: Status }) {
   return (

@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { createTaskSchema, taskFiltersSchema } from "../../../../../features/tasks/schemas";
-import { createTask } from "../../../../../features/tasks/service";
-import { listTasksForProject } from "../../../../../features/tasks/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { createTaskSchema, taskFiltersSchema } from "@/features/tasks/schemas";
+import { createTask } from "@/features/tasks/service";
+import { listTasksForProject } from "@/features/tasks/queries";
 
 type Params = { params: Promise<{ id: string }> };
 

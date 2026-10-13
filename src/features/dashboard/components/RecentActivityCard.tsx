@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
-import { Avatar, Card, Icon } from "../../../components/ui";
-import { relTime } from "../../../lib/utils";
-import type { Notification } from "../../notifications/types";
+import { Avatar, Card, Icon } from "@/components/ui";
+import { relTime } from "@/lib/utils";
+import type { Notification } from "@/features/notifications/types";
 
 export function RecentActivityCard({ notifications }: { notifications: Notification[] }) {
   const router = useRouter();

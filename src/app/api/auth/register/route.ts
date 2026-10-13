@@ -1,7 +1,7 @@
-import { apiOk, errorResponse, parseBody } from "../../../../lib/api";
-import { createSession } from "../../../../lib/auth/session";
-import { registerSchema } from "../../../../features/auth/schemas";
-import { registerUser } from "../../../../features/auth/service";
+import { apiOk, errorResponse, parseBody } from "@/lib/api";
+import { createSession } from "@/lib/auth/session";
+import { registerSchema } from "@/features/auth/schemas";
+import { registerUser } from "@/features/auth/service";
 
 export async function POST(request: Request) {
   try {

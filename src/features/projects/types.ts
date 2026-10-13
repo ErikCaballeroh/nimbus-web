@@ -1,4 +1,4 @@
-import type { Role } from "../../lib/permissions";
+import type { Role } from "@/lib/permissions";
 
 export interface ProjectMemberSummary {
   id: string;
