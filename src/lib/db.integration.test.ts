@@ -42,7 +42,7 @@ describe("database schema", () => {
       data: { name: "Other", email: `other-${Date.now()}@nimbus.test`, passwordHash: "x" },
     });
     const project = await prisma.project.create({
-      data: { name: "Constraint check", createdBy: owner.id },
+      data: { name: "Constraint check", codePrefix: `C${Date.now().toString().slice(-6)}`, createdBy: owner.id },
     });
     await prisma.projectMember.create({
       data: { projectId: project.id, userId: owner.id, role: "owner" },
