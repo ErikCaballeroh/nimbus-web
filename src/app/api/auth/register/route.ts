@@ -1,10 +1,12 @@
 import { apiOk, errorResponse, parseBody } from "@/lib/api";
+import { assertRateLimit } from "@/lib/rateLimit";
 import { createSession } from "@/lib/auth/session";
 import { registerSchema } from "@/features/auth/schemas";
 import { registerUser } from "@/features/auth/service";
 
 export async function POST(request: Request) {
   try {
+    assertRateLimit(request, "register");
     const input = await parseBody(request, registerSchema);
     const user = await registerUser(input);
     await createSession(user.id);

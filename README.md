@@ -12,7 +12,7 @@ See `CLAUDE.md` for stack, conventions and folder structure, and
 Requirements: Node 20+, pnpm, Docker (for Postgres).
 
 ```bash
-cp .env.example .env     # fill in SEED_PASSWORD, leave DATABASE_URL as-is for local dev
+cp .env.example .env     # fill in SEED_PASSWORD and SESSION_SECRET, leave DATABASE_URL as-is for local dev
 pnpm install
 pnpm db:up                # starts Postgres in Docker (and a nimbus_test database for tests)
 pnpm db:migrate            # applies prisma/migrations to the "nimbus" database
@@ -27,15 +27,12 @@ doesn't collide with a native Postgres install. If you have an older `.env`
 pointing at `localhost:5432`, update both `DATABASE_URL` and
 `TEST_DATABASE_URL` to `5433`, then recreate the container with `pnpm db:up`.
 
-### Running the app in Docker
-
-Run `pnpm dev` on the host (above). An optional `app` profile also runs the
-dev server inside Docker (`pnpm dev:docker`), but avoid it on Windows/macOS:
-with the code bind-mounted through Docker Desktop's file sharing, the initial
-file scan is slow and Next.js's dev server can end up with an incomplete route
-list, so some route handlers (e.g. `/api/projects/:id/tasks/import/preview`)
-intermittently return `404` until restart. The Next.js docs recommend running
-`next dev` on the host for the same reason.
+Docker is only used for Postgres; always run `next dev` on the host, not
+inside Docker. With the code bind-mounted through Docker Desktop's file
+sharing, the initial file scan is slow and Next.js's dev server can end up
+with an incomplete route list, so some route handlers intermittently return
+`404` until restart. The Next.js docs recommend running `next dev` on the
+host for the same reason.
 
 ### Running the test suite
 
@@ -71,6 +68,10 @@ the shape `{ "error": { "code", "message", "details"? } }` (see
 | POST   | `/auth/recover`         | public | `{ email }`                                       | `200 { ok: true }` (always, whether or not the email exists) |
 | POST   | `/auth/reset-password`  | public | `{ token, password, confirmPassword }`            | `200 { ok: true }`; `422` if the token is invalid, expired or already used |
 | GET    | `/auth/me`               | session | —                                                  | `200` current user |
+| GET    | `/auth/clear-session`    | public | —                                                  | `302` to `/login`, clearing the session cookie (used to break a redirect loop when the cookie's signature is valid but the user it points to no longer exists) |
+
+`register`, `login` and `recover` are rate-limited per IP (5 requests per 15
+minutes); past that they respond `429 RATE_LIMITED`.
 
 ### Profile (`/api/me`)
 

@@ -1,6 +1,6 @@
-// Shapes for the mock data that no feature reads anymore (phase 9 deletes
-// this directory and the store that seeds from it). Kept separate from
-// features/projects/types.ts, features/members/types.ts,
+// Shapes for prisma/seed.ts's fixture data (named "Mock*" since this data
+// originally came from the Figma mocks, before phases 3-7 moved the app to
+// real DB-backed data). Kept separate from features/projects/types.ts, features/members/types.ts,
 // features/tasks/types.ts and features/notifications/types.ts, which
 // describe the real, DB-backed features wired up in phases 5-7 — the two
 // had diverged (e.g. a project's members have one global mock role here,

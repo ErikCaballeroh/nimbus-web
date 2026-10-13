@@ -1,7 +1,19 @@
-import { Card } from "@/components/ui";
+import { Card, EmptyState, Icon } from "@/components/ui";
 import type { TeamMember } from "@/features/team/types";
 
 export function TeamGrid({ team }: { team: TeamMember[] }) {
+  if (team.length === 0) {
+    return (
+      <div className="mx-auto max-w-5xl px-5 py-6 sm:px-6">
+        <EmptyState
+          icon={<Icon.team width={26} height={26} />}
+          title="Sin compañeros de equipo"
+          body="Aún no compartes ningún proyecto con otras personas."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-5xl px-5 py-6 sm:px-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

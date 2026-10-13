@@ -2,10 +2,10 @@ import "dotenv/config";
 import bcrypt from "bcrypt";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma";
-import { currentUserId, members as mockMembers } from "../src/lib/mock/members";
-import { projects as mockProjects } from "../src/lib/mock/projects";
-import { tasks as mockTasks } from "../src/lib/mock/tasks";
-import { notifications as mockNotifications } from "../src/lib/mock/notifications";
+import { currentUserId, members as mockMembers } from "./seed-data/members";
+import { projects as mockProjects } from "./seed-data/projects";
+import { tasks as mockTasks } from "./seed-data/tasks";
+import { notifications as mockNotifications } from "./seed-data/notifications";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });

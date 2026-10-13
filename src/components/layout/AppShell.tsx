@@ -7,7 +7,6 @@ import type { ProjectListItem } from "@/features/projects/types";
 import type { Notification } from "@/features/notifications/types";
 import { CurrentUserProvider } from "@/features/auth/CurrentUserContext";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { StoreProvider } from "@/store";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 
@@ -45,9 +44,7 @@ export function AppShell({
   return (
     <CurrentUserProvider user={user}>
       <ThemeProvider initialTheme={user.theme} onChange={persistTheme}>
-        <StoreProvider>
-          <AppShellContent projects={projects} notifications={notifications}>{children}</AppShellContent>
-        </StoreProvider>
+        <AppShellContent projects={projects} notifications={notifications}>{children}</AppShellContent>
       </ThemeProvider>
     </CurrentUserProvider>
   );
