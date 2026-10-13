@@ -146,6 +146,38 @@ Tags are a global catalog shared by all projects, not scoped per project.
 | GET    | `/api/users/:id`     | session | —    | `200` user summary |
 | GET    | `/api/team`           | session | —    | `200` users who share at least one project with the caller, each with their total `projectCount` and `taskCount` |
 
+### Notifications (`/api/notifications`)
+
+| Method | Path                            | Auth    | Body | Success |
+| ------ | --------------------------------- | ------- | ---- | -------- |
+| GET    | `/api/notifications`              | session | —    | `200` up to 100 of the caller's notifications, newest first |
+| PATCH  | `/api/notifications/:id/read`     | session | —    | `200 { ok: true }`; `404` if the notification isn't the caller's |
+| PATCH  | `/api/notifications/read-all`     | session | —    | `200 { ok: true }`, marks every unread notification of the caller as read |
+
+`features/notifications/service.ts` exports `notify()`, called from the services below (never notifies the actor about their own action):
+
+| Event                                              | Type       | Recipient(s)                          |
+| ---------------------------------------------------- | ---------- | ---------------------------------------- |
+| A task is created with, or reassigned to, a member   | `assigned` | the new assignee                         |
+| A task's status changes                              | `status`   | the task's assignee                      |
+| A comment is added to a task                         | `comment`  | the task's assignee and its creator (deduped) |
+| A member is added to a project                       | `member`   | the new member                           |
+| A task's due date is tomorrow (via the cron below)    | `due`      | the task's assignee                      |
+
+### Dashboard (`/api/dashboard/summary`)
+
+| Method | Path                     | Auth    | Success |
+| ------ | -------------------------- | ------- | -------- |
+| GET    | `/api/dashboard/summary`   | session | `200` aggregates over the projects the caller belongs to: `activeProjects`, `totalTasks`, `doneTasks`, `overdueTasks`, `dueNext7Days`, `tasksByStatus`, `tasksByPriority`, `projectsProgress` (`{ id, name, total, done }[]`), `upcomingTasks` (the 5 soonest-due incomplete tasks with an `overdue` flag) |
+
+### Cron (`/api/cron/due-reminders`)
+
+| Method | Path                       | Auth                              | Success |
+| ------ | ----------------------------- | ------------------------------------ | -------- |
+| GET    | `/api/cron/due-reminders`     | `x-cron-secret` header === `CRON_SECRET` | `200 { notified }` |
+
+Meant for a scheduled job (e.g. a daily cron), not a browser: it sends a `due` notification to the assignee of every non-done task whose due date is tomorrow, skipping a task that already got one today so re-running it the same day doesn't duplicate reminders. Set `CRON_SECRET` in `.env` (see `.env.example`); the route 401s without a valid header.
+
 ## 3. Roles and permissions
 
 Role order: `viewer` < `editor` < `admin` < `owner`. Checked by `assertProjectRole(userId, projectId, minRole)` in `lib/permissions.ts`, which throws `404` for a non-member and `403` below the minimum.
