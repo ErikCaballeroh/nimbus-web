@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, Icon } from "../ui";
-import { useStore } from "../../store";
 import { useCurrentUser } from "../../features/auth/CurrentUserContext";
+import type { ProjectListItem } from "../../features/projects/types";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: Icon.dashboard },
@@ -13,9 +13,8 @@ const nav = [
   { href: "/settings", label: "Configuración", icon: Icon.settings },
 ] as const;
 
-export function Sidebar() {
+export function Sidebar({ projects }: { projects: ProjectListItem[] }) {
   const pathname = usePathname();
-  const { projects } = useStore();
   const me = useCurrentUser();
 
   return (
