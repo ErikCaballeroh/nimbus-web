@@ -44,4 +44,11 @@ export const es = {
       due: "Vencimientos",
     },
   },
+  notifications: {
+    assigned: (taskTitle: string) => `te asignó la tarea «${taskTitle}»`,
+    comment: (taskTitle: string) => `comentó en «${taskTitle}»`,
+    status: (taskTitle: string, statusLabel: string) => `movió «${taskTitle}» a ${statusLabel}`,
+    member: (projectName: string) => `te añadió a «${projectName}»`,
+    due: (taskTitle: string) => `«${taskTitle}» vence mañana`,
+  },
 } as const;

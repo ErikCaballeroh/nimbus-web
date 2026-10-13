@@ -2,6 +2,8 @@ import "server-only";
 import { db } from "../../lib/db";
 import { ApiError } from "../../lib/api";
 import { assertProjectRole, PROJECT_ACTION_MIN_ROLE, type Role } from "../../lib/permissions";
+import { es } from "../../lib/i18n/es";
+import { notify } from "../notifications/service";
 import type { AddMemberInput } from "./schemas";
 
 export async function addMember(actorId: string, projectId: string, input: AddMemberInput): Promise<void> {
@@ -18,6 +20,15 @@ export async function addMember(actorId: string, projectId: string, input: AddMe
     }
     throw err;
   }
+
+  const project = await db.project.findUniqueOrThrow({ where: { id: projectId }, select: { name: true } });
+  await notify({
+    recipientId: input.userId,
+    actorId,
+    type: "member",
+    text: es.notifications.member(project.name),
+    projectId,
+  });
 }
 
 export async function removeMember(actorId: string, projectId: string, targetUserId: string): Promise<void> {

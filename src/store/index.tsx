@@ -5,17 +5,16 @@ import { members as seedMembers } from "../lib/mock/members";
 import { projects as seedProjects } from "../lib/mock/projects";
 import { tasks as seedTasks } from "../lib/mock/tasks";
 import { notifications as seedNotifs } from "../lib/mock/notifications";
-import type { MockProject, MockMember, MockTask } from "../lib/mock/types";
-import type { Notification } from "../features/notifications/types";
+import type { MockProject, MockMember, MockTask, MockNotification } from "../lib/mock/types";
 
-// Projects, members and tasks here are read-only mock data left to feed the
-// Dashboard screen (phase 7); the real Projects/Members/Tasks features
-// (phases 5-6) read and write through the API instead, see features/*.
+// Nothing reads this store anymore as of phase 7 (Dashboard/Header/
+// Notifications all moved to real data); kept only because phase 9 is where
+// docs/ROADMAP.md schedules deleting lib/mock/ and this provider together.
 interface Store {
   projects: MockProject[];
   tasks: MockTask[];
   members: MockMember[];
-  notifications: Notification[];
+  notifications: MockNotification[];
   markAllRead: () => void;
   toggleRead: (id: string) => void;
 }

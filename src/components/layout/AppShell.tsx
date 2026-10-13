@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import type { CurrentUser } from "../../features/auth/types";
 import type { ProjectListItem } from "../../features/projects/types";
+import type { Notification } from "../../features/notifications/types";
 import { CurrentUserProvider } from "../../features/auth/CurrentUserContext";
 import { ThemeProvider } from "../providers/ThemeProvider";
 import { StoreProvider } from "../../store";
@@ -33,24 +34,34 @@ async function persistTheme(theme: "light" | "dark") {
 export function AppShell({
   user,
   projects,
+  notifications,
   children,
 }: {
   user: CurrentUser;
   projects: ProjectListItem[];
+  notifications: Notification[];
   children: ReactNode;
 }) {
   return (
     <CurrentUserProvider user={user}>
       <ThemeProvider initialTheme={user.theme} onChange={persistTheme}>
         <StoreProvider>
-          <AppShellContent projects={projects}>{children}</AppShellContent>
+          <AppShellContent projects={projects} notifications={notifications}>{children}</AppShellContent>
         </StoreProvider>
       </ThemeProvider>
     </CurrentUserProvider>
   );
 }
 
-function AppShellContent({ projects, children }: { projects: ProjectListItem[]; children: ReactNode }) {
+function AppShellContent({
+  projects,
+  notifications,
+  children,
+}: {
+  projects: ProjectListItem[];
+  notifications: Notification[];
+  children: ReactNode;
+}) {
   const pathname = usePathname();
   const heading = headingForPath(pathname);
 
@@ -58,7 +69,7 @@ function AppShellContent({ projects, children }: { projects: ProjectListItem[]; 
     <div className="flex h-full overflow-hidden bg-background">
       <Sidebar projects={projects} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <Header title={heading.title} subtitle={heading.subtitle} />
+        <Header title={heading.title} subtitle={heading.subtitle} notifications={notifications} />
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>

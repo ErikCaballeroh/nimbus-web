@@ -5,24 +5,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, Icon, IconButton, Tooltip } from "../ui";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { useStore } from "../../store";
 import { useTheme } from "../providers/ThemeProvider";
 import { useCurrentUser } from "../../features/auth/CurrentUserContext";
 import { relTime } from "../../lib/utils";
+import type { Notification } from "../../features/notifications/types";
 
 export function Header({
   title,
   subtitle,
+  notifications,
   actions,
 }: {
   title: string;
   subtitle?: string;
+  notifications: Notification[];
   actions?: ReactNode;
 }) {
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const me = useCurrentUser();
-  const { members, notifications } = useStore();
   const unread = notifications.filter((n) => !n.read).length;
   const [openNotif, setOpenNotif] = useState(false);
   const [openUser, setOpenUser] = useState(false);
@@ -77,21 +78,27 @@ export function Header({
               </Link>
             </div>
             <div className="max-h-96 overflow-y-auto">
-              {notifications.slice(0, 5).map((n) => {
-                const actor = members.find((m) => m.id === n.actorId)!;
-                return (
-                  <div key={n.id} className={`flex gap-3 px-4 py-3 transition-colors hover:bg-secondary ${!n.read ? "bg-accent/40" : ""}`}>
-                    <Avatar name={actor.name} color={actor.color} size={32} />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[13px] leading-snug text-foreground">
-                        <span className="font-medium">{actor.name}</span> {n.text}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{relTime(n.time)}</p>
+              {notifications.length === 0 && (
+                <p className="px-4 py-6 text-center text-[13px] text-muted-foreground">Sin notificaciones.</p>
+              )}
+              {notifications.slice(0, 5).map((n) => (
+                <div key={n.id} className={`flex gap-3 px-4 py-3 transition-colors hover:bg-secondary ${!n.read ? "bg-accent/40" : ""}`}>
+                  {n.actorName ? (
+                    <Avatar name={n.actorName} color={n.actorAvatarColor ?? "#94a3b8"} size={32} />
+                  ) : (
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                      <Icon.clock width={16} height={16} />
                     </div>
-                    {!n.read && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />}
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[13px] leading-snug text-foreground">
+                      {n.actorName && <span className="font-medium">{n.actorName}</span>} {n.text}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{relTime(n.createdAt)}</p>
                   </div>
-                );
-              })}
+                  {!n.read && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />}
+                </div>
+              ))}
             </div>
           </div>
         )}

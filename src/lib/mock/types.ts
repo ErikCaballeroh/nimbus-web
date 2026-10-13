@@ -1,12 +1,25 @@
-// Shapes for the mock data that still backs the Dashboard screen (phase 7).
-// Kept separate from features/projects/types.ts, features/members/types.ts
-// and features/tasks/types.ts, which now describe the real, DB-backed
-// Projects/Members/Tasks features wired up in phases 5-6 — the two have
-// diverged (e.g. a project's members have one global mock role here, vs. a
-// per-project role in the real feature; a mock task embeds its comments and
-// plain-string tags, vs. the real feature's separate comments endpoint and
-// Tag objects).
+// Shapes for the mock data that no feature reads anymore (phase 9 deletes
+// this directory and the store that seeds from it). Kept separate from
+// features/projects/types.ts, features/members/types.ts,
+// features/tasks/types.ts and features/notifications/types.ts, which
+// describe the real, DB-backed features wired up in phases 5-7 — the two
+// had diverged (e.g. a project's members have one global mock role here,
+// vs. a per-project role in the real feature; a mock task embeds its
+// comments and plain-string tags, vs. the real feature's separate comments
+// endpoint and Tag objects).
 export type MockRole = "owner" | "admin" | "editor" | "viewer";
+
+export type MockNotificationType = "assigned" | "comment" | "status" | "member" | "due";
+
+export interface MockNotification {
+  id: string;
+  type: MockNotificationType;
+  actorId: string;
+  text: string;
+  time: string;
+  read: boolean;
+  projectId?: string;
+}
 
 export interface MockComment {
   id: string;

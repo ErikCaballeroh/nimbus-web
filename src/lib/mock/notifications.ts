@@ -1,6 +1,6 @@
-import type { Notification } from "../../features/notifications/types";
+import type { MockNotification } from "./types";
 
-export const notifications: Notification[] = [
+export const notifications: MockNotification[] = [
   { id: "n1", type: "assigned", actorId: "u2", text: "te asignó la tarea «Testing QA»", time: "2026-09-01T09:12:00", read: false, projectId: "p1" },
   { id: "n2", type: "comment", actorId: "u3", text: "comentó en «Revisión de UI»", time: "2026-09-01T08:40:00", read: false, projectId: "p1" },
   { id: "n3", type: "status", actorId: "u4", text: "movió «Diseñar wireframes» a Completado", time: "2026-08-31T17:05:00", read: false, projectId: "p1" },
