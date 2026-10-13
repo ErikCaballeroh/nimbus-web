@@ -1,6 +1,6 @@
-import { apiError, apiOk, errorResponse } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
-import { getDashboardSummary } from "../../../../features/dashboard/queries";
+import { apiError, apiOk, errorResponse } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getDashboardSummary } from "@/features/dashboard/queries";
 
 export async function GET() {
   try {

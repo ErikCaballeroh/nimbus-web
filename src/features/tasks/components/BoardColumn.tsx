@@ -1,6 +1,6 @@
-import { Icon, IconButton, Tooltip } from "../../../components/ui";
-import { es } from "../../../lib/i18n/es";
-import { statusAccent, type Status, type Task } from "../types";
+import { Icon, IconButton, Tooltip } from "@/components/ui";
+import { es } from "@/lib/i18n/es";
+import { statusAccent, type Status, type Task } from "@/features/tasks/types";
 import { TaskCard } from "./TaskCard";
 
 export function BoardColumn({

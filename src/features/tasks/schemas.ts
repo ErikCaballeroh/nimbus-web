@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-const title = z.string().trim().min(3, { error: "El título debe tener al menos 3 caracteres." }).max(200);
-const description = z.string().trim().max(5000).optional();
-const status = z.enum(["todo", "in_progress", "review", "done"], { error: "Estado no válido." });
-const priority = z.enum(["low", "medium", "high", "urgent"], { error: "Prioridad no válida." });
+export const title = z.string().trim().min(3, { error: "El título debe tener al menos 3 caracteres." }).max(200);
+export const description = z.string().trim().max(5000).optional();
+export const status = z.enum(["todo", "in_progress", "review", "done"], { error: "Estado no válido." });
+export const priority = z.enum(["low", "medium", "high", "urgent"], { error: "Prioridad no válida." });
 const assigneeId = z.uuid({ error: "Responsable no válido." }).nullable().optional();
-const dueDate = z.iso.date({ error: "Fecha no válida." }).nullable().optional();
+export const dueDate = z.iso.date({ error: "Fecha no válida." }).nullable().optional();
 
 export const createTaskSchema = z.object({
   title,

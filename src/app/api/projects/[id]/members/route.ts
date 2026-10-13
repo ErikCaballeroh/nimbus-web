@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { addMemberSchema } from "../../../../../features/members/schemas";
-import { addMember } from "../../../../../features/members/service";
-import { listProjectMembers } from "../../../../../features/members/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { addMemberSchema } from "@/features/members/schemas";
+import { addMember } from "@/features/members/service";
+import { listProjectMembers } from "@/features/members/queries";
 
 type Params = { params: Promise<{ id: string }> };
 

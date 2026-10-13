@@ -1,8 +1,8 @@
 import "server-only";
 import { randomBytes, createHash } from "node:crypto";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { hashPassword, verifyPassword } from "../../lib/auth/password";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import type { CurrentUser } from "./types";
 import type {
   LoginInput,

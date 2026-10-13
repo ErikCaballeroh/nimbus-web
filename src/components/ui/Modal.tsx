@@ -3,7 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
-import { es } from "../../lib/i18n/es";
+import { es } from "@/lib/i18n/es";
 
 export function Modal({
   open,

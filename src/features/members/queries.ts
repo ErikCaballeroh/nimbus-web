@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { assertProjectRole, PROJECT_ACTION_MIN_ROLE } from "../../lib/permissions";
+import { db } from "@/lib/db";
+import { assertProjectRole, PROJECT_ACTION_MIN_ROLE } from "@/lib/permissions";
 import type { ProjectMember } from "./types";
 
 export async function listProjectMembers(userId: string, projectId: string): Promise<ProjectMember[]> {

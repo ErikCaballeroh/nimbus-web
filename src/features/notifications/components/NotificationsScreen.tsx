@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, Button, Card, EmptyState, Icon } from "../../../components/ui";
-import { relTime } from "../../../lib/utils";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import type { Notification, NotificationType } from "../types";
+import { Avatar, Button, Card, EmptyState, Icon } from "@/components/ui";
+import { relTime } from "@/lib/utils";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import type { Notification, NotificationType } from "@/features/notifications/types";
 
 const typeMeta: Record<NotificationType, { icon: typeof Icon.user; tone: string }> = {
   assigned: { icon: Icon.user, tone: "var(--primary)" },

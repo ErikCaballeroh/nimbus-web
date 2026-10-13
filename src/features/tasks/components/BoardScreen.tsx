@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Toast } from "../../../components/ui";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import { hasRole } from "../../../lib/roles";
-import type { Project } from "../../projects/types";
-import type { ProjectMember } from "../../members/types";
-import type { Tag } from "../../tags/types";
-import { ExportModal } from "../../import-export/components/ExportModal";
-import { ImportModal } from "../../import-export/components/ImportModal";
-import { statusOrder, type Status, type Task } from "../types";
+import { Toast } from "@/components/ui";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import { hasRole } from "@/lib/roles";
+import type { Project } from "@/features/projects/types";
+import type { ProjectMember } from "@/features/members/types";
+import type { Tag } from "@/features/tags/types";
+import { ExportModal } from "@/features/import-export/components/ExportModal";
+import { ImportModal } from "@/features/import-export/components/ImportModal";
+import { statusOrder, type Status, type Task } from "@/features/tasks/types";
 import { BoardColumn } from "./BoardColumn";
 import { BoardToolbar } from "./BoardToolbar";
 import { TaskDetailModal } from "./TaskDetailModal";
@@ -121,8 +121,13 @@ export function BoardScreen({
         onClose={() => setDetailId(null)}
         onChanged={() => router.refresh()}
       />
-      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={tasks.length} />
-      <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
+      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={tasks.length} projectId={project.id} />
+      <ImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        projectId={project.id}
+        onImported={() => router.refresh()}
+      />
       {error && <Toast message={error} onDismiss={() => setError("")} />}
     </div>
   );

@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { createCommentSchema } from "../../../../../features/comments/schemas";
-import { addComment } from "../../../../../features/comments/service";
-import { listCommentsForTask } from "../../../../../features/comments/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { createCommentSchema } from "@/features/comments/schemas";
+import { addComment } from "@/features/comments/service";
+import { listCommentsForTask } from "@/features/comments/queries";
 
 type Params = { params: Promise<{ id: string }> };
 

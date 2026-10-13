@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
-import { db } from "../../lib/db";
-import type { ApiError } from "../../lib/api";
-import { createProject } from "../projects/service";
+import { db } from "@/lib/db";
+import type { ApiError } from "@/lib/api";
+import { createProject } from "@/features/projects/service";
 import { addMember, changeMemberRole, removeMember } from "./service";
 
 async function createUser() {

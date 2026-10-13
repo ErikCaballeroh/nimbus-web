@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Field, Input, Modal, Select, Spinner, Textarea } from "../../../components/ui";
-import { es } from "../../../lib/i18n/es";
-import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
-import type { Project } from "../../projects/types";
-import type { ProjectMember } from "../../members/types";
-import { statusOrder, type Priority, type Status } from "../types";
+import { Button, Field, Input, Modal, Select, Spinner, Textarea } from "@/components/ui";
+import { es } from "@/lib/i18n/es";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
+import type { Project } from "@/features/projects/types";
+import type { ProjectMember } from "@/features/members/types";
+import { statusOrder, type Priority, type Status } from "@/features/tasks/types";
 
 export function TaskFormModal({
   open,

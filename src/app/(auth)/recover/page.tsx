@@ -1,5 +1,5 @@
-import { AuthShell } from "@/src/features/auth/components/AuthShell";
-import { RecoverForm } from "@/src/features/auth/components/RecoverForm";
+import { AuthShell } from "@/features/auth/components/AuthShell";
+import { RecoverForm } from "@/features/auth/components/RecoverForm";
 
 export default function RecoverPage() {
     return (

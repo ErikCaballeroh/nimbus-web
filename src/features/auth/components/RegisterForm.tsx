@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, Field, Input, PasswordInput, Spinner } from "../../../components/ui";
-import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
+import { Button, Field, Input, PasswordInput, Spinner } from "@/components/ui";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
 import { AuthHeader } from "./AuthShell";
 
 export function RegisterForm() {

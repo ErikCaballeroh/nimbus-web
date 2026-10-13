@@ -1,4 +1,4 @@
-import { initials } from "../../lib/utils";
+import { initials } from "@/lib/utils";
 
 export function Avatar({ name, color, size = 32 }: { name: string; color: string; size?: number }) {
   return (

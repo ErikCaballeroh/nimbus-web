@@ -1,15 +1,15 @@
 import { notFound, redirect } from "next/navigation";
-import { ApiError } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { getProjectForUser } from "../../../../../features/projects/queries";
-import { listProjectMembers } from "../../../../../features/members/queries";
-import { listTasksForProject } from "../../../../../features/tasks/queries";
-import { listTags } from "../../../../../features/tags/queries";
-import type { Project } from "../../../../../features/projects/types";
-import type { ProjectMember } from "../../../../../features/members/types";
-import type { Task } from "../../../../../features/tasks/types";
-import type { Tag } from "../../../../../features/tags/types";
-import { BoardScreen } from "../../../../../features/tasks/components/BoardScreen";
+import { ApiError } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getProjectForUser } from "@/features/projects/queries";
+import { listProjectMembers } from "@/features/members/queries";
+import { listTasksForProject } from "@/features/tasks/queries";
+import { listTags } from "@/features/tags/queries";
+import type { Project } from "@/features/projects/types";
+import type { ProjectMember } from "@/features/members/types";
+import type { Task } from "@/features/tasks/types";
+import type { Tag } from "@/features/tags/types";
+import { BoardScreen } from "@/features/tasks/components/BoardScreen";
 
 export default async function BoardPage({ params }: { params: Promise<{ projectId: string }> }) {
     const user = await getCurrentUser();

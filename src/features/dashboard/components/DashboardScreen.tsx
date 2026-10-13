@@ -1,9 +1,9 @@
 'use client';
 
-import { Icon } from "../../../components/ui";
-import { useTheme } from "../../../components/providers/ThemeProvider";
-import type { Notification } from "../../notifications/types";
-import type { DashboardSummary } from "../types";
+import { Icon } from "@/components/ui";
+import { useTheme } from "@/components/providers/ThemeProvider";
+import type { Notification } from "@/features/notifications/types";
+import type { DashboardSummary } from "@/features/dashboard/types";
 import { ProjectsProgressChart } from "./ProjectsProgressChart";
 import { RecentActivityCard } from "./RecentActivityCard";
 import { SprintBurndownChart } from "./SprintBurndownChart";

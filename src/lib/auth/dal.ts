@@ -1,7 +1,7 @@
 import "server-only";
 import { cache } from "react";
-import { db } from "../db";
-import type { CurrentUser } from "../../features/auth/types";
+import { db } from "@/lib/db";
+import type { CurrentUser } from "@/features/auth/types";
 import { getSessionUserId } from "./session";
 
 /** Cached per request. Returns null when there is no valid session. */

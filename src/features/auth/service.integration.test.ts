@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
 import {
   loginUser,
   registerUser,

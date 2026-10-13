@@ -1,7 +1,7 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "../../lib/permissions";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { assertProjectRole, TASK_ACTION_MIN_ROLE } from "@/lib/permissions";
 import type { Comment } from "./types";
 
 export async function listCommentsForTask(userId: string, taskId: string): Promise<Comment[]> {

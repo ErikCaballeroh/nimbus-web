@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../lib/api";
-import { getCurrentUser } from "../../../../lib/auth/dal";
-import { updateProjectSchema } from "../../../../features/projects/schemas";
-import { deleteProject, updateProject } from "../../../../features/projects/service";
-import { getProjectForUser } from "../../../../features/projects/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { updateProjectSchema } from "@/features/projects/schemas";
+import { deleteProject, updateProject } from "@/features/projects/service";
+import { getProjectForUser } from "@/features/projects/queries";
 
 type Params = { params: Promise<{ id: string }> };
 

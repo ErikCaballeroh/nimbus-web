@@ -1,4 +1,4 @@
-import type { Priority, Status } from "../tasks/types";
+import type { Priority, Status } from "@/features/tasks/types";
 
 export interface UpcomingTask {
   id: string;

@@ -1,31 +1,97 @@
 'use client';
 
-import { useState } from "react";
-import { Button, Icon, Modal } from "../../../components/ui";
-import { PriorityBadge } from "../../tasks/components/PriorityBadge";
-import { StatusPill } from "../../tasks/components/StatusPill";
-import type { Priority, Status } from "../../tasks/types";
+import { useRef, useState } from "react";
+import { Button, Icon, Modal, Spinner } from "@/components/ui";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import { PriorityBadge } from "@/features/tasks/components/PriorityBadge";
+import { StatusPill } from "@/features/tasks/components/StatusPill";
+import type { Priority, Status } from "@/features/tasks/types";
 
-// Preview-only for now: real parsing, validation and persistence land in
-// Phase 8 (import/export). This shows the intended flow without writing
-// anything, since the board's tasks are real data since Phase 6.
-export function ImportModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [phase, setPhase] = useState<"drop" | "preview" | "done">("drop");
+interface RowResult {
+  row: number;
+  valid: boolean;
+  data?: { title: string; priority?: Priority; status?: Status };
+  errors?: string[];
+}
+
+interface PreviewResponse {
+  rows: RowResult[];
+  validCount: number;
+  invalidCount: number;
+}
+
+interface ImportResponse {
+  imported: number;
+  skipped: number;
+  errors: { row: number; message: string }[];
+}
+
+type Phase = "drop" | "previewing" | "preview" | "importing" | "done" | "error";
+
+export function ImportModal({
+  open,
+  onClose,
+  projectId,
+  onImported,
+}: {
+  open: boolean;
+  onClose: () => void;
+  projectId: string;
+  onImported: () => void;
+}) {
+  const [phase, setPhase] = useState<Phase>("drop");
   const [drag, setDrag] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<PreviewResponse | null>(null);
+  const [result, setResult] = useState<ImportResponse | null>(null);
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const sample = [
-    { title: "Configurar analítica", priority: "medium" as Priority, status: "todo" as Status, valid: true },
-    { title: "Migrar base de datos", priority: "high" as Priority, status: "todo" as Status, valid: true },
-    { title: "Auditoría de accesibilidad", priority: "low" as Priority, status: "in_progress" as Status, valid: true },
-    { title: "", priority: "medium" as Priority, status: "todo" as Status, valid: false },
-    { title: "Redactar documentación", priority: "medium" as Priority, status: "review" as Status, valid: true },
-  ];
-  const valid = sample.filter((s) => s.valid);
-
-  const confirm = () => {
-    setPhase("done");
+  const runPreview = async (picked: File) => {
+    setFile(picked);
+    setPhase("previewing");
+    try {
+      const formData = new FormData();
+      formData.append("file", picked);
+      const response = await apiFetch<PreviewResponse>(`/api/projects/${projectId}/tasks/import/preview`, {
+        method: "POST",
+        body: formData,
+      });
+      setPreview(response);
+      setPhase("preview");
+    } catch (err) {
+      setError(err instanceof ApiClientError ? err.message : "Ha ocurrido un error inesperado.");
+      setPhase("error");
+    }
   };
-  const close = () => { setPhase("drop"); onClose(); };
+
+  const confirm = async () => {
+    if (!file) return;
+    setPhase("importing");
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await apiFetch<ImportResponse>(`/api/projects/${projectId}/tasks/import`, {
+        method: "POST",
+        body: formData,
+      });
+      setResult(response);
+      setPhase("done");
+      onImported();
+    } catch (err) {
+      setError(err instanceof ApiClientError ? err.message : "Ha ocurrido un error inesperado.");
+      setPhase("error");
+    }
+  };
+
+  const reset = () => {
+    setPhase("drop");
+    setFile(null);
+    setPreview(null);
+    setResult(null);
+    setError("");
+  };
+  const close = () => { reset(); onClose(); };
 
   return (
     <Modal
@@ -37,44 +103,83 @@ export function ImportModal({ open, onClose }: { open: boolean; onClose: () => v
       footer={
         phase === "preview" ? (
           <>
-            <Button variant="secondary" onClick={() => setPhase("drop")}>Atrás</Button>
-            <Button onClick={confirm}>Importar {valid.length} tareas</Button>
+            <Button variant="secondary" onClick={reset}>Atrás</Button>
+            <Button onClick={confirm} disabled={!preview || preview.validCount === 0}>
+              Importar {preview?.validCount ?? 0} tareas
+            </Button>
           </>
         ) : phase === "done" ? (
           <Button onClick={close}>Listo</Button>
+        ) : phase === "error" ? (
+          <>
+            <Button variant="secondary" onClick={reset}>Atrás</Button>
+            <Button variant="secondary" onClick={close}>Cerrar</Button>
+          </>
         ) : (
           <Button variant="secondary" onClick={close}>Cancelar</Button>
         )
       }
     >
       {phase === "drop" && (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-          onDragLeave={() => setDrag(false)}
-          onDrop={(e) => { e.preventDefault(); setDrag(false); setPhase("preview"); }}
-          onClick={() => setPhase("preview")}
-          className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-16 text-center transition-colors ${drag ? "border-primary bg-accent" : "border-border-strong hover:border-primary hover:bg-secondary/50"
-            }`}
-        >
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-            <Icon.upload width={26} height={26} />
+        <div>
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+            onDragLeave={() => setDrag(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDrag(false);
+              const dropped = e.dataTransfer.files[0];
+              if (dropped) runPreview(dropped);
+            }}
+            onClick={() => inputRef.current?.click()}
+            className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-16 text-center transition-colors ${drag ? "border-primary bg-accent" : "border-border-strong hover:border-primary hover:bg-secondary/50"
+              }`}
+          >
+            <input
+              ref={inputRef}
+              type="file"
+              accept=".csv,.xlsx"
+              className="hidden"
+              onChange={(e) => {
+                const picked = e.target.files?.[0];
+                if (picked) runPreview(picked);
+              }}
+            />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-accent text-accent-foreground">
+              <Icon.upload width={26} height={26} />
+            </div>
+            <p className="text-sm font-medium text-foreground">Arrastra tu archivo aquí o haz clic para explorar</p>
+            <p className="mt-1 text-xs text-muted-foreground">Formatos soportados: .xlsx, .csv · Máx 5 MB</p>
           </div>
-          <p className="text-sm font-medium text-foreground">Arrastra tu archivo aquí o haz clic para explorar</p>
-          <p className="mt-1 text-xs text-muted-foreground">Formatos soportados: .xlsx, .csv · Máx 10 MB</p>
+          <a
+            href="/templates/plantilla-tareas.xlsx"
+            download
+            className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+          >
+            <Icon.download width={14} height={14} /> Descargar plantilla
+          </a>
         </div>
       )}
 
-      {phase === "preview" && (
+      {phase === "previewing" && (
+        <div className="flex flex-col items-center py-16">
+          <Spinner />
+          <p className="mt-3 text-sm text-muted-foreground">Validando archivo…</p>
+        </div>
+      )}
+
+      {phase === "preview" && preview && (
         <div>
           <div className="mb-3 flex items-center gap-4 rounded-lg border border-border bg-secondary/40 px-4 py-3 text-[13px]">
-            <span className="flex items-center gap-1.5 text-success"><Icon.check_circle width={15} height={15} /> {valid.length} válidas</span>
-            <span className="flex items-center gap-1.5 text-danger"><Icon.alert width={15} height={15} /> {sample.length - valid.length} con errores</span>
-            <span className="ml-auto flex items-center gap-1.5 text-muted-foreground"><Icon.file width={15} height={15} /> tareas-importar.xlsx</span>
+            <span className="flex items-center gap-1.5 text-success"><Icon.check_circle width={15} height={15} /> {preview.validCount} válidas</span>
+            <span className="flex items-center gap-1.5 text-danger"><Icon.alert width={15} height={15} /> {preview.invalidCount} con errores</span>
+            <span className="ml-auto flex items-center gap-1.5 text-muted-foreground"><Icon.file width={15} height={15} /> {file?.name}</span>
           </div>
-          <div className="overflow-hidden rounded-lg border border-border">
+          <div className="max-h-96 overflow-auto rounded-lg border border-border">
             <table className="w-full text-sm">
               <thead className="bg-secondary/60 text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
+                  <th className="px-4 py-2.5 font-medium">Fila</th>
                   <th className="px-4 py-2.5 font-medium">Título</th>
                   <th className="px-4 py-2.5 font-medium">Prioridad</th>
                   <th className="px-4 py-2.5 font-medium">Estado</th>
@@ -82,16 +187,19 @@ export function ImportModal({ open, onClose }: { open: boolean; onClose: () => v
                 </tr>
               </thead>
               <tbody>
-                {sample.map((r, i) => (
-                  <tr key={i} className={`border-t border-border ${!r.valid ? "bg-danger/5" : ""}`}>
-                    <td className="px-4 py-2.5 text-foreground">{r.title || <span className="text-danger">(vacío)</span>}</td>
-                    <td className="px-4 py-2.5"><PriorityBadge priority={r.priority} /></td>
-                    <td className="px-4 py-2.5"><StatusPill status={r.status} /></td>
+                {preview.rows.map((r) => (
+                  <tr key={r.row} className={`border-t border-border ${!r.valid ? "bg-danger/5" : ""}`}>
+                    <td className="px-4 py-2.5 text-muted-foreground">{r.row}</td>
+                    <td className="px-4 py-2.5 text-foreground">{r.data?.title || <span className="text-danger">(vacío)</span>}</td>
+                    <td className="px-4 py-2.5">{r.data?.priority && <PriorityBadge priority={r.data.priority} />}</td>
+                    <td className="px-4 py-2.5">{r.data?.status && <StatusPill status={r.data.status} />}</td>
                     <td className="px-4 py-2.5">
                       {r.valid ? (
                         <span className="inline-flex items-center gap-1 text-xs text-success"><Icon.check width={14} height={14} /> OK</span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-xs text-danger"><Icon.alert width={14} height={14} /> Falta título</span>
+                        <span className="inline-flex items-center gap-1 text-xs text-danger">
+                          <Icon.alert width={14} height={14} /> {(r.errors ?? []).join(" ")}
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -102,13 +210,39 @@ export function ImportModal({ open, onClose }: { open: boolean; onClose: () => v
         </div>
       )}
 
-      {phase === "done" && (
+      {phase === "importing" && (
+        <div className="flex flex-col items-center py-16">
+          <Spinner />
+          <p className="mt-3 text-sm text-muted-foreground">Importando tareas…</p>
+        </div>
+      )}
+
+      {phase === "done" && result && (
         <div className="flex flex-col items-center py-6 text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success/12 text-success">
             <Icon.check_circle width={30} height={30} />
           </div>
           <h3 className="text-[15px] font-semibold text-foreground">Importación completada</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{valid.length} tareas nuevas se añadieron al proyecto.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {result.imported} tareas nuevas se añadieron al proyecto
+            {result.skipped > 0 ? `, ${result.skipped} omitidas` : ""}.
+          </p>
+          {result.errors.length > 0 && (
+            <ul className="mt-3 w-full max-w-sm space-y-1 text-left text-xs text-danger">
+              {result.errors.map((e) => (
+                <li key={e.row}>Fila {e.row}: {e.message}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {phase === "error" && (
+        <div className="flex flex-col items-center py-10 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-danger/12 text-danger">
+            <Icon.alert width={30} height={30} />
+          </div>
+          <p className="text-sm text-foreground">{error}</p>
         </div>
       )}
     </Modal>

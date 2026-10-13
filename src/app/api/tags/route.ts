@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../lib/api";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { createTagSchema } from "../../../features/tags/schemas";
-import { createTag } from "../../../features/tags/service";
-import { listTags } from "../../../features/tags/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { createTagSchema } from "@/features/tags/schemas";
+import { createTag } from "@/features/tags/service";
+import { listTags } from "@/features/tags/queries";
 
 export async function GET() {
   try {

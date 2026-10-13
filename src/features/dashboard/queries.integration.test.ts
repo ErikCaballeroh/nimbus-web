@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
-import { db } from "../../lib/db";
-import { createProject } from "../projects/service";
-import { createTask, updateTaskStatus } from "../tasks/service";
+import { db } from "@/lib/db";
+import { createProject } from "@/features/projects/service";
+import { createTask, updateTaskStatus } from "@/features/tasks/service";
 import { getDashboardSummary } from "./queries";
 
 async function createUser() {

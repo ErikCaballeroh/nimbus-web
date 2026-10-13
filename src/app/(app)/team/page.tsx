@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { getTeamForUser } from "../../../features/team/queries";
-import { TeamGrid } from "../../../features/members/components/TeamGrid";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getTeamForUser } from "@/features/team/queries";
+import { TeamGrid } from "@/features/members/components/TeamGrid";
 
 export default async function TeamPage() {
     const user = await getCurrentUser();

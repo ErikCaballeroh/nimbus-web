@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Avatar, Button, Card, Icon, IconButton } from "../../../components/ui";
-import { useClickOutside } from "../../../hooks/useClickOutside";
-import { es } from "../../../lib/i18n/es";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import { hasRole, type Role } from "../../../lib/roles";
-import { useCurrentUser } from "../../auth/CurrentUserContext";
-import type { Project } from "../../projects/types";
-import type { ProjectMember } from "../types";
+import { Avatar, Button, Card, Icon, IconButton } from "@/components/ui";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { es } from "@/lib/i18n/es";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import { hasRole, type Role } from "@/lib/roles";
+import { useCurrentUser } from "@/features/auth/CurrentUserContext";
+import type { Project } from "@/features/projects/types";
+import type { ProjectMember } from "@/features/members/types";
 import { AddMemberModal } from "./AddMemberModal";
 
 const roleTone: Record<Role, string> = {

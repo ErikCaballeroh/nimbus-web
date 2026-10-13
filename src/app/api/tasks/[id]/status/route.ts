@@ -1,7 +1,7 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { updateTaskStatusSchema } from "../../../../../features/tasks/schemas";
-import { updateTaskStatus } from "../../../../../features/tasks/service";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { updateTaskStatusSchema } from "@/features/tasks/schemas";
+import { updateTaskStatus } from "@/features/tasks/service";
 
 type Params = { params: Promise<{ id: string }> };
 

@@ -1,4 +1,4 @@
-import type { Tag } from "../tags/types";
+import type { Tag } from "@/features/tags/types";
 
 export type Priority = "low" | "medium" | "high" | "urgent";
 export type Status = "todo" | "in_progress" | "review" | "done";

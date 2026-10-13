@@ -1,11 +1,11 @@
 import { notFound, redirect } from "next/navigation";
-import { ApiError } from "../../../../../lib/api";
-import { getCurrentUser } from "../../../../../lib/auth/dal";
-import { getProjectForUser } from "../../../../../features/projects/queries";
-import { listProjectMembers } from "../../../../../features/members/queries";
-import type { Project } from "../../../../../features/projects/types";
-import type { ProjectMember } from "../../../../../features/members/types";
-import { MembersScreen } from "../../../../../features/members/components/MembersScreen";
+import { ApiError } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getProjectForUser } from "@/features/projects/queries";
+import { listProjectMembers } from "@/features/members/queries";
+import type { Project } from "@/features/projects/types";
+import type { ProjectMember } from "@/features/members/types";
+import { MembersScreen } from "@/features/members/components/MembersScreen";
 
 export default async function MembersPage({ params }: { params: Promise<{ projectId: string }> }) {
     const user = await getCurrentUser();

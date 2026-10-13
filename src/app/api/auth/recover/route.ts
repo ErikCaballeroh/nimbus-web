@@ -1,6 +1,6 @@
-import { apiOk, errorResponse, parseBody } from "../../../../lib/api";
-import { recoverSchema } from "../../../../features/auth/schemas";
-import { requestPasswordReset } from "../../../../features/auth/service";
+import { apiOk, errorResponse, parseBody } from "@/lib/api";
+import { recoverSchema } from "@/features/auth/schemas";
+import { requestPasswordReset } from "@/features/auth/service";
 
 export async function POST(request: Request) {
   try {

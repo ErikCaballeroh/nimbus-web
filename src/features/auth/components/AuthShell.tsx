@@ -1,8 +1,8 @@
 'use client';
 
 import type { ReactNode } from "react";
-import { Icon } from "../../../components/ui";
-import { useTheme } from "../../../components/providers/ThemeProvider";
+import { Icon } from "@/components/ui";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 export function AuthShell({ children }: { children: ReactNode }) {
   const { theme, toggleTheme } = useTheme();

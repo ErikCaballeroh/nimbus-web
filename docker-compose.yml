@@ -6,7 +6,9 @@ services:
       POSTGRES_PASSWORD: nimbus
       POSTGRES_DB: nimbus
     ports:
-      - "5432:5432"
+      # Host port 5433, not 5432, so it never collides with a native Postgres
+      # install on the developer's machine.
+      - "5433:5432"
     volumes:
       - nimbus_pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d
@@ -16,10 +18,10 @@ services:
       timeout: 5s
       retries: 10
 
-  # Optional: runs the Next.js dev server inside Docker too, on the same
-  # network as `postgres`, so it never touches a host port for the database.
-  # Useful when a host port (e.g. a native Postgres install) conflicts with
-  # 5432. Start with `docker compose --profile app up`.
+  # Optional: runs the Next.js dev server inside Docker too. Not recommended on
+  # Windows/macOS: with the code bind-mounted through Docker Desktop's file
+  # sharing, `next dev` can intermittently miss route handlers (404) — see
+  # README "Running the app in Docker". Start with `docker compose --profile app up`.
   app:
     profiles: ["app"]
     build:

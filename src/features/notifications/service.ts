@@ -1,7 +1,7 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { ApiError } from "../../lib/api";
-import { es } from "../../lib/i18n/es";
+import { db } from "@/lib/db";
+import { ApiError } from "@/lib/api";
+import { es } from "@/lib/i18n/es";
 import type { NotificationType } from "./types";
 
 interface NotifyInput {

@@ -1,6 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { afterAll, describe, expect, it } from "vitest";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@/generated/prisma";
 
 // Exercises the real Postgres schema (migrations must already be applied to
 // DATABASE_URL, see README.md "Running the test suite"). Run with

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { getDashboardSummary } from "../../../features/dashboard/queries";
-import { listNotificationsForUser } from "../../../features/notifications/queries";
-import { DashboardScreen } from "../../../features/dashboard/components/DashboardScreen";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getDashboardSummary } from "@/features/dashboard/queries";
+import { listNotificationsForUser } from "@/features/notifications/queries";
+import { DashboardScreen } from "@/features/dashboard/components/DashboardScreen";
 
 export default async function DashboardPage() {
     const user = await getCurrentUser();

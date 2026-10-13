@@ -1,8 +1,8 @@
-import { apiError, apiOk, errorResponse, parseBody } from "../../../lib/api";
-import { getCurrentUser } from "../../../lib/auth/dal";
-import { createProjectSchema } from "../../../features/projects/schemas";
-import { createProject } from "../../../features/projects/service";
-import { listProjectsForUser } from "../../../features/projects/queries";
+import { apiError, apiOk, errorResponse, parseBody } from "@/lib/api";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { createProjectSchema } from "@/features/projects/schemas";
+import { createProject } from "@/features/projects/service";
+import { listProjectsForUser } from "@/features/projects/queries";
 
 export async function GET() {
   try {

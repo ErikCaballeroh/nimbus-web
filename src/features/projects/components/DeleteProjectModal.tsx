@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Modal } from "../../../components/ui";
-import { apiFetch, ApiClientError } from "../../../lib/apiClient";
-import type { ProjectListItem } from "../types";
+import { Button, Modal } from "@/components/ui";
+import { apiFetch, ApiClientError } from "@/lib/apiClient";
+import type { ProjectListItem } from "@/features/projects/types";
 
 export function DeleteProjectModal({
   open,

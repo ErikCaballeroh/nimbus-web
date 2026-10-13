@@ -12,11 +12,12 @@ export default defineConfig({
       // dev data.
       DATABASE_URL:
         process.env.TEST_DATABASE_URL ??
-        "postgresql://nimbus:nimbus@localhost:5432/nimbus_test?schema=public",
+        "postgresql://nimbus:nimbus@localhost:5433/nimbus_test?schema=public",
     },
   },
   resolve: {
     alias: {
+      "@": path.resolve(__dirname, "src"),
       // See vitest.server-only-stub.ts for why this is stubbed out here.
       "server-only": path.resolve(__dirname, "vitest.server-only-stub.ts"),
     },

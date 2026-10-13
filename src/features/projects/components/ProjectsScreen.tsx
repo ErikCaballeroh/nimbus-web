@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { Button, EmptyState, Icon } from "../../../components/ui";
-import type { ProjectListItem } from "../types";
+import { Button, EmptyState, Icon } from "@/components/ui";
+import type { ProjectListItem } from "@/features/projects/types";
 import { DeleteProjectModal } from "./DeleteProjectModal";
 import { ProjectFormModal } from "./ProjectFormModal";
 import { ProjectsTable, type SortKey } from "./ProjectsTable";

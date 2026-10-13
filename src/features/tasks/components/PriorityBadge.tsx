@@ -1,5 +1,5 @@
-import { es } from "../../../lib/i18n/es";
-import { priorityTone, type Priority } from "../types";
+import { es } from "@/lib/i18n/es";
+import { priorityTone, type Priority } from "@/features/tasks/types";
 
 export function PriorityBadge({ priority, dot }: { priority: Priority; dot?: boolean }) {
   const tone = priorityTone[priority];

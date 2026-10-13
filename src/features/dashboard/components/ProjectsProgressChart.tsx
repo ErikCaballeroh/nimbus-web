@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip as RTooltip, XAxis, YAxis } from "recharts";
-import { Card } from "../../../components/ui";
+import { Card } from "@/components/ui";
 import { chartColors, tooltipStyle } from "./chartTheme";
 
 export function ProjectsProgressChart({

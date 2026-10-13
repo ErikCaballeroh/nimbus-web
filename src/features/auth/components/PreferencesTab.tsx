@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { Field, Icon, Select, Toggle } from "../../../components/ui";
-import { useTheme } from "../../../components/providers/ThemeProvider";
+import { Field, Icon, Select, Toggle } from "@/components/ui";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { SettingsSection } from "./SettingsSection";
 
 export function PreferencesTab() {

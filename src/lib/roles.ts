@@ -42,6 +42,8 @@ export const TASK_ACTION_MIN_ROLE = {
   addComment: "editor",
   deleteOwnComment: "editor",
   deleteAnyComment: "admin",
+  importTasks: "editor",
+  exportTasks: "editor",
 } as const satisfies Record<string, Role>;
 
 export type TaskAction = keyof typeof TASK_ACTION_MIN_ROLE;

@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "../../lib/db";
-import { assertProjectRole, PROJECT_ACTION_MIN_ROLE } from "../../lib/permissions";
+import { db } from "@/lib/db";
+import { assertProjectRole, PROJECT_ACTION_MIN_ROLE } from "@/lib/permissions";
 import { getProjectForUser } from "./queries";
 import type { Project } from "./types";
 import type { CreateProjectInput, UpdateProjectInput } from "./schemas";
