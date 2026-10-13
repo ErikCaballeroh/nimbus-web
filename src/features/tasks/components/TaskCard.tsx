@@ -1,19 +1,18 @@
 import { Avatar, Icon, Tag } from "../../../components/ui";
 import { fmtDateShort, isOverdue } from "../../../lib/utils";
-import type { MockMember } from "../../../lib/mock/types";
 import type { Task } from "../types";
 import { PriorityBadge } from "./PriorityBadge";
 
 export function TaskCard({
   task,
-  assignee,
+  draggable,
   dragging,
   onDragStart,
   onDragEnd,
   onClick,
 }: {
   task: Task;
-  assignee: MockMember | undefined;
+  draggable: boolean;
   dragging: boolean;
   onDragStart: () => void;
   onDragEnd: () => void;
@@ -21,11 +20,11 @@ export function TaskCard({
 }) {
   return (
     <article
-      draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
+      draggable={draggable}
+      onDragStart={draggable ? onDragStart : undefined}
+      onDragEnd={draggable ? onDragEnd : undefined}
       onClick={onClick}
-      className={`group cursor-pointer rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition-all duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-md)] active:cursor-grabbing ${dragging ? "opacity-40 rotate-1" : ""
+      className={`group cursor-pointer rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition-all duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${draggable ? "active:cursor-grabbing" : ""} ${dragging ? "opacity-40 rotate-1" : ""
         }`}
     >
       <div className="mb-2 flex items-center justify-between">
@@ -35,18 +34,18 @@ export function TaskCard({
       <h4 className="text-[13px] font-medium leading-snug text-foreground">{task.title}</h4>
       {task.tags.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
-          {task.tags.map((tg) => <Tag key={tg}>{tg}</Tag>)}
+          {task.tags.map((tg) => <Tag key={tg.id}>{tg.name}</Tag>)}
         </div>
       )}
       <div className="mt-3 flex items-center justify-between">
-        <span className={`inline-flex items-center gap-1 text-xs ${isOverdue(task.due) && task.status !== "done" ? "text-danger" : "text-muted-foreground"}`}>
-          <Icon.calendar width={13} height={13} /> {fmtDateShort(task.due)}
+        <span className={`inline-flex items-center gap-1 text-xs ${task.dueDate && isOverdue(task.dueDate) && task.status !== "done" ? "text-danger" : "text-muted-foreground"}`}>
+          <Icon.calendar width={13} height={13} /> {task.dueDate ? fmtDateShort(task.dueDate) : "Sin fecha"}
         </span>
         <div className="flex items-center gap-2 text-muted-foreground">
-          {task.comments.length > 0 && (
-            <span className="inline-flex items-center gap-0.5 text-xs"><Icon.message width={13} height={13} /> {task.comments.length}</span>
+          {task.commentCount > 0 && (
+            <span className="inline-flex items-center gap-0.5 text-xs"><Icon.message width={13} height={13} /> {task.commentCount}</span>
           )}
-          {assignee ? <Avatar name={assignee.name} color={assignee.color} size={24} /> : <span className="h-6 w-6 rounded-full border border-dashed border-border-strong" />}
+          {task.assignee ? <Avatar name={task.assignee.name} color={task.assignee.avatarColor} size={24} /> : <span className="h-6 w-6 rounded-full border border-dashed border-border-strong" />}
         </div>
       </div>
     </article>

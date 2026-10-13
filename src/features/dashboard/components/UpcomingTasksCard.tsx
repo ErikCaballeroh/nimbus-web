@@ -1,9 +1,10 @@
 import { Card } from "../../../components/ui";
 import { fmtDateShort, isOverdue } from "../../../lib/utils";
+import type { MockTask } from "../../../lib/mock/types";
 import { PriorityBadge } from "../../tasks/components/PriorityBadge";
-import { statusAccent, type Task } from "../../tasks/types";
+import { statusAccent } from "../../tasks/types";
 
-export function UpcomingTasksCard({ tasks }: { tasks: Task[] }) {
+export function UpcomingTasksCard({ tasks }: { tasks: MockTask[] }) {
   return (
     <Card className="p-5">
       <h3 className="mb-4 text-[15px] font-semibold text-foreground">Tareas próximas</h3>

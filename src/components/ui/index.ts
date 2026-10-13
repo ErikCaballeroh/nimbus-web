@@ -16,5 +16,6 @@ export { Skeleton } from "./Skeleton";
 export { Spinner } from "./Spinner";
 export { Tag } from "./Tag";
 export { Textarea } from "./Textarea";
+export { Toast } from "./Toast";
 export { Toggle } from "./Toggle";
 export { Tooltip } from "./Tooltip";
