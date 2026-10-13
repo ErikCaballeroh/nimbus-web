@@ -1,27 +1,31 @@
-import { Card } from "../../../components/ui";
-import { fmtDateShort, isOverdue } from "../../../lib/utils";
-import type { MockTask } from "../../../lib/mock/types";
+import { Card, EmptyState, Icon } from "../../../components/ui";
+import { fmtDateShort } from "../../../lib/utils";
 import { PriorityBadge } from "../../tasks/components/PriorityBadge";
 import { statusAccent } from "../../tasks/types";
+import type { UpcomingTask } from "../types";
 
-export function UpcomingTasksCard({ tasks }: { tasks: MockTask[] }) {
+export function UpcomingTasksCard({ tasks }: { tasks: UpcomingTask[] }) {
   return (
     <Card className="p-5">
       <h3 className="mb-4 text-[15px] font-semibold text-foreground">Tareas próximas</h3>
-      <div className="flex flex-col gap-1">
-        {tasks.map((t) => (
-          <div key={t.id} className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-secondary">
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: statusAccent[t.status] }} />
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] font-medium text-foreground">{t.title}</div>
-              <div className={`text-xs ${isOverdue(t.due) ? "text-danger" : "text-muted-foreground"}`}>
-                {isOverdue(t.due) ? "Atrasada · " : ""}{fmtDateShort(t.due)}
+      {tasks.length === 0 ? (
+        <EmptyState icon={<Icon.check_circle width={22} height={22} />} title="Sin tareas pendientes" body="No hay tareas con fecha límite próxima." />
+      ) : (
+        <div className="flex flex-col gap-1">
+          {tasks.map((t) => (
+            <div key={t.id} className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-secondary">
+              <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: statusAccent[t.status] }} />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[13px] font-medium text-foreground">{t.title}</div>
+                <div className={`text-xs ${t.overdue ? "text-danger" : "text-muted-foreground"}`}>
+                  {t.overdue ? "Atrasada · " : ""}{fmtDateShort(t.dueDate)}
+                </div>
               </div>
+              <PriorityBadge priority={t.priority} dot />
             </div>
-            <PriorityBadge priority={t.priority} dot />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </Card>
   );
 }
