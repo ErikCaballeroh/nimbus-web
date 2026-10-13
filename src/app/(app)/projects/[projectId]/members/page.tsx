@@ -9,7 +9,7 @@ import { MembersScreen } from "../../../../../features/members/components/Member
 
 export default async function MembersPage({ params }: { params: Promise<{ projectId: string }> }) {
     const user = await getCurrentUser();
-    if (!user) redirect("/login");
+    if (!user) redirect("/api/auth/clear-session");
 
     const { projectId } = await params;
 

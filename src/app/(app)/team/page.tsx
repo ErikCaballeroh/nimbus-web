@@ -5,7 +5,7 @@ import { TeamGrid } from "../../../features/members/components/TeamGrid";
 
 export default async function TeamPage() {
     const user = await getCurrentUser();
-    if (!user) redirect("/login");
+    if (!user) redirect("/api/auth/clear-session");
 
     const team = await getTeamForUser(user.id);
     return <TeamGrid team={team} />;

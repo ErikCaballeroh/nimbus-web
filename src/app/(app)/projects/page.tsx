@@ -5,7 +5,7 @@ import { ProjectsScreen } from "../../../features/projects/components/ProjectsSc
 
 export default async function ProjectsPage() {
     const user = await getCurrentUser();
-    if (!user) redirect("/login");
+    if (!user) redirect("/api/auth/clear-session");
 
     const projects = await listProjectsForUser(user.id);
     return <ProjectsScreen projects={projects} />;
