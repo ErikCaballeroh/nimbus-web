@@ -26,3 +26,22 @@ export const PROJECT_ACTION_MIN_ROLE = {
 } as const satisfies Record<string, Role>;
 
 export type ProjectAction = keyof typeof PROJECT_ACTION_MIN_ROLE;
+
+/**
+ * Minimum role required for each task/tag/comment action. Not documented as
+ * a single-row table in README section 3 (only comment deletion has an
+ * explicit rule there); viewers are read-only on a project's tasks.
+ */
+export const TASK_ACTION_MIN_ROLE = {
+  viewTasks: "viewer",
+  createTask: "editor",
+  editTask: "editor",
+  deleteTask: "admin",
+  changeTaskStatus: "editor",
+  manageTags: "editor",
+  addComment: "editor",
+  deleteOwnComment: "editor",
+  deleteAnyComment: "admin",
+} as const satisfies Record<string, Role>;
+
+export type TaskAction = keyof typeof TASK_ACTION_MIN_ROLE;

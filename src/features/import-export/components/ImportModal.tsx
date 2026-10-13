@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { Button, Icon, Modal } from "../../../components/ui";
-import { useStore } from "../../../store";
 import { PriorityBadge } from "../../tasks/components/PriorityBadge";
 import { StatusPill } from "../../tasks/components/StatusPill";
 import type { Priority, Status } from "../../tasks/types";
 
-export function ImportModal({ open, onClose, projectId }: { open: boolean; onClose: () => void; projectId: string }) {
-  const { importTasks } = useStore();
+// Preview-only for now: real parsing, validation and persistence land in
+// Phase 8 (import/export). This shows the intended flow without writing
+// anything, since the board's tasks are real data since Phase 6.
+export function ImportModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [phase, setPhase] = useState<"drop" | "preview" | "done">("drop");
   const [drag, setDrag] = useState(false);
 
@@ -22,7 +23,6 @@ export function ImportModal({ open, onClose, projectId }: { open: boolean; onClo
   const valid = sample.filter((s) => s.valid);
 
   const confirm = () => {
-    importTasks(projectId, valid.map((v) => ({ title: v.title, priority: v.priority, status: v.status })));
     setPhase("done");
   };
   const close = () => { setPhase("drop"); onClose(); };

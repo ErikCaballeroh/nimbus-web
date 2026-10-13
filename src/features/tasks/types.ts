@@ -1,11 +1,12 @@
+import type { Tag } from "../tags/types";
+
 export type Priority = "low" | "medium" | "high" | "urgent";
 export type Status = "todo" | "in_progress" | "review" | "done";
 
-export interface Comment {
+export interface TaskAssignee {
   id: string;
-  authorId: string;
-  text: string;
-  time: string;
+  name: string;
+  avatarColor: string;
 }
 
 export interface Task {
@@ -16,10 +17,13 @@ export interface Task {
   status: Status;
   priority: Priority;
   assigneeId: string | null;
-  due: string; // ISO
+  assignee: TaskAssignee | null;
+  dueDate: string | null; // ISO
   projectId: string;
-  comments: Comment[];
-  tags: string[];
+  tags: Tag[];
+  commentCount: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const statusOrder: Status[] = ["todo", "in_progress", "review", "done"];

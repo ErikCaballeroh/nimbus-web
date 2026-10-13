@@ -13,6 +13,9 @@ export const es = {
       body: "Ocurrió un error de conexión. Revisa tu red e inténtalo de nuevo.",
       retry: "Reintentar",
     },
+    toast: {
+      dismiss: "Cerrar",
+    },
   },
   enums: {
     priority: {

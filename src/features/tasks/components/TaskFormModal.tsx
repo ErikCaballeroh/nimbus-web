@@ -3,40 +3,60 @@
 import { useState } from "react";
 import { Button, Field, Input, Modal, Select, Spinner, Textarea } from "../../../components/ui";
 import { es } from "../../../lib/i18n/es";
-import { useStore } from "../../../store";
-import type { MockProject } from "../../../lib/mock/types";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
+import type { Project } from "../../projects/types";
+import type { ProjectMember } from "../../members/types";
 import { statusOrder, type Priority, type Status } from "../types";
 
 export function TaskFormModal({
   open,
   onClose,
   project,
+  members,
   initialStatus = "todo",
+  onSaved,
 }: {
   open: boolean;
   onClose: () => void;
-  project: MockProject;
+  project: Project;
+  members: ProjectMember[];
   initialStatus?: Status;
+  onSaved: () => void;
 }) {
-  const { addTask, members } = useStore();
-  const projMembers = members.filter((m) => project.memberIds.includes(m.id));
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
   const [status, setStatus] = useState<Status>(initialStatus);
-  const [assignee, setAssignee] = useState<string>(projMembers[0]?.id ?? "");
-  const [due, setDue] = useState("2026-09-20");
-  const [err, setErr] = useState("");
+  const [assignee, setAssignee] = useState<string>("");
+  const [due, setDue] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
-  const save = () => {
-    if (title.trim().length < 3) return setErr("El título es obligatorio");
+  const save = async () => {
+    setErrors({});
     setSaving(true);
-    setTimeout(() => {
-      addTask({ title, description: desc, priority, status, assigneeId: assignee || null, due, projectId: project.id, tags: [] });
-      setSaving(false);
+    try {
+      await apiFetch(`/api/projects/${project.id}/tasks`, {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          description: desc || undefined,
+          priority,
+          status,
+          assigneeId: assignee || undefined,
+          dueDate: due || undefined,
+        }),
+      });
+      onSaved();
       onClose();
-    }, 500);
+    } catch (err) {
+      if (err instanceof ApiClientError) {
+        const fieldErrors = fieldErrorsFromDetails(err.details);
+        setErrors(Object.keys(fieldErrors).length ? fieldErrors : { title: err.message });
+      }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -53,8 +73,8 @@ export function TaskFormModal({
       }
     >
       <div className="flex flex-col gap-4">
-        <Field label="Título" error={err}>
-          <Input value={title} onChange={(e) => { setTitle(e.target.value); setErr(""); }} placeholder="Implementar autenticación" error={!!err} />
+        <Field label="Título" error={errors.title}>
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Implementar autenticación" error={!!errors.title} />
         </Field>
         <Field label="Descripción">
           <Textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Detalles, criterios de aceptación…" />
@@ -74,11 +94,11 @@ export function TaskFormModal({
               ))}
             </Select>
           </Field>
-          <Field label="Asignado a">
+          <Field label="Asignado a" error={errors.assigneeId}>
             <Select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
               <option value="">Sin asignar</option>
-              {projMembers.map((m) => (
-                <option key={m.id} value={m.id}>{m.name}</option>
+              {members.map((m) => (
+                <option key={m.userId} value={m.userId}>{m.name}</option>
               ))}
             </Select>
           </Field>

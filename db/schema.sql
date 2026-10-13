@@ -46,6 +46,8 @@ CREATE TABLE projects (
     color          VARCHAR(7) NOT NULL DEFAULT '#4f46e5',
     start_date     DATE,
     end_date       DATE,
+    code_prefix    VARCHAR(10) NOT NULL UNIQUE,       -- e.g. "NIM", used to build task codes
+    task_seq       INTEGER NOT NULL DEFAULT 0,        -- last task number issued, incremented per task
     created_by     UUID NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
     created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
     CONSTRAINT chk_project_dates CHECK (end_date IS NULL OR start_date IS NULL OR end_date >= start_date)
@@ -150,4 +152,10 @@ CREATE INDEX idx_notifications_recipient_unread
 -- 5. Primary keys have no DB-level default: Prisma Client generates the
 --    UUID in the application layer (`@default(uuid())`), so this file
 --    has no dependency on the pgcrypto extension.
+-- 6. projects.code_prefix is derived from the project name when it's
+--    created (features/projects/service.ts) and never changes afterwards,
+--    so task codes stay stable even if the project is renamed. task_seq
+--    is incremented atomically per task creation (`UPDATE ... RETURNING`
+--    in the same transaction as the insert) to stay safe under concurrent
+--    creation without needing an explicit row lock.
 -- ============================================================

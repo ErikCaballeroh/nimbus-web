@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import type { CurrentUser } from "../../features/auth/types";
+import type { ProjectListItem } from "../../features/projects/types";
 import { CurrentUserProvider } from "../../features/auth/CurrentUserContext";
 import { ThemeProvider } from "../providers/ThemeProvider";
 import { StoreProvider } from "../../store";
@@ -29,25 +30,33 @@ async function persistTheme(theme: "light" | "dark") {
   if (!res.ok) throw new Error("No se pudo guardar el tema");
 }
 
-export function AppShell({ user, children }: { user: CurrentUser; children: ReactNode }) {
+export function AppShell({
+  user,
+  projects,
+  children,
+}: {
+  user: CurrentUser;
+  projects: ProjectListItem[];
+  children: ReactNode;
+}) {
   return (
     <CurrentUserProvider user={user}>
       <ThemeProvider initialTheme={user.theme} onChange={persistTheme}>
         <StoreProvider>
-          <AppShellContent>{children}</AppShellContent>
+          <AppShellContent projects={projects}>{children}</AppShellContent>
         </StoreProvider>
       </ThemeProvider>
     </CurrentUserProvider>
   );
 }
 
-function AppShellContent({ children }: { children: ReactNode }) {
+function AppShellContent({ projects, children }: { projects: ProjectListItem[]; children: ReactNode }) {
   const pathname = usePathname();
   const heading = headingForPath(pathname);
 
   return (
     <div className="flex h-full overflow-hidden bg-background">
-      <Sidebar />
+      <Sidebar projects={projects} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header title={heading.title} subtitle={heading.subtitle} />
         <main className="flex-1 overflow-y-auto">{children}</main>

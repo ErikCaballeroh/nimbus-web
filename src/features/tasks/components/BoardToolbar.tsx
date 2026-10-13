@@ -1,17 +1,19 @@
 import { Button, Icon } from "../../../components/ui";
-import type { MockProject } from "../../../lib/mock/types";
+import type { Project } from "../../projects/types";
 
 export function BoardToolbar({
   project,
   taskCount,
   memberCount,
+  canCreateTask,
   onImport,
   onExport,
   onCreateTask,
 }: {
-  project: MockProject;
+  project: Project;
   taskCount: number;
   memberCount: number;
+  canCreateTask: boolean;
   onImport: () => void;
   onExport: () => void;
   onCreateTask: () => void;
@@ -24,7 +26,9 @@ export function BoardToolbar({
       </div>
       <Button variant="secondary" size="sm" onClick={onImport}><Icon.upload width={15} height={15} /> Importar</Button>
       <Button variant="secondary" size="sm" onClick={onExport}><Icon.download width={15} height={15} /> Exportar</Button>
-      <Button size="sm" onClick={onCreateTask}><Icon.plus width={16} height={16} /> Nueva tarea</Button>
+      {canCreateTask && (
+        <Button size="sm" onClick={onCreateTask}><Icon.plus width={16} height={16} /> Nueva tarea</Button>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import type { Priority, Status, Task } from "../../features/tasks/types";
+import type { MockPriority, MockStatus, MockTask } from "./types";
 
 let taskSeq = 100;
-function mkTask(p: Partial<Task> & { title: string; status: Status; priority: Priority; projectId: string }): Task {
+function mkTask(p: Partial<MockTask> & { title: string; status: MockStatus; priority: MockPriority; projectId: string }): MockTask {
   taskSeq++;
   return {
     id: "t" + taskSeq,
@@ -15,7 +15,7 @@ function mkTask(p: Partial<Task> & { title: string; status: Status; priority: Pr
   };
 }
 
-export const tasks: Task[] = [
+export const tasks: MockTask[] = [
   mkTask({ title: "Diseñar wireframes", status: "done", priority: "medium", projectId: "p1", assigneeId: "u3", due: "2026-08-12", tags: ["Diseño"], description: "Wireframes de baja fidelidad para las 6 páginas clave.", comments: [{ id: "c1", authorId: "u1", text: "Excelente base, aprobado ✅", time: "2026-08-11T10:20:00" }] }),
   mkTask({ title: "Implementar autenticación", status: "in_progress", priority: "high", projectId: "p1", assigneeId: "u4", due: "2026-09-05", tags: ["Backend"], description: "Login, registro y recuperación con JWT y refresh tokens." }),
   mkTask({ title: "Revisión de UI", status: "review", priority: "medium", projectId: "p1", assigneeId: "u3", due: "2026-09-08", tags: ["Diseño", "QA"], description: "Revisar consistencia de componentes y estados." }),

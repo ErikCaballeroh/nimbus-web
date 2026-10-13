@@ -3,7 +3,14 @@ import { db } from "./db";
 import { ApiError } from "./api";
 import { hasRole, type Role } from "./roles";
 
-export { hasRole, PROJECT_ACTION_MIN_ROLE, type ProjectAction, type Role } from "./roles";
+export {
+  hasRole,
+  PROJECT_ACTION_MIN_ROLE,
+  TASK_ACTION_MIN_ROLE,
+  type ProjectAction,
+  type TaskAction,
+  type Role,
+} from "./roles";
 
 /**
  * Throws NOT_FOUND when the user isn't a member of the project (so

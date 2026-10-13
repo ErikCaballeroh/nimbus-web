@@ -1,40 +1,81 @@
 'use client';
 
 import { useState } from "react";
-import { useStore } from "../../../store";
+import { useRouter } from "next/navigation";
+import { Toast } from "../../../components/ui";
+import { apiFetch, ApiClientError } from "../../../lib/apiClient";
+import { hasRole } from "../../../lib/roles";
+import type { Project } from "../../projects/types";
+import type { ProjectMember } from "../../members/types";
+import type { Tag } from "../../tags/types";
 import { ExportModal } from "../../import-export/components/ExportModal";
 import { ImportModal } from "../../import-export/components/ImportModal";
-import type { MockProject } from "../../../lib/mock/types";
 import { statusOrder, type Status, type Task } from "../types";
 import { BoardColumn } from "./BoardColumn";
 import { BoardToolbar } from "./BoardToolbar";
 import { TaskDetailModal } from "./TaskDetailModal";
 import { TaskFormModal } from "./TaskFormModal";
 
-export function BoardScreen({ project }: { project: MockProject }) {
-  const { tasks, members, moveTask } = useStore();
+export function BoardScreen({
+  project,
+  members,
+  tasks: initialTasks,
+  tags,
+}: {
+  project: Project;
+  members: ProjectMember[];
+  tasks: Task[];
+  tags: Tag[];
+}) {
+  const router = useRouter();
+  const canEdit = hasRole(project.myRole, "editor");
+
+  // Reset the optimistic copy whenever the server gives us fresh tasks
+  // (e.g. after router.refresh()), without a setState-in-effect cascade.
+  const [prevInitialTasks, setPrevInitialTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState(initialTasks);
+  if (initialTasks !== prevInitialTasks) {
+    setPrevInitialTasks(initialTasks);
+    setTasks(initialTasks);
+  }
+
   const [drag, setDrag] = useState<string | null>(null);
   const [over, setOver] = useState<Status | null>(null);
   const [createStatus, setCreateStatus] = useState<Status | null>(null);
-  const [detail, setDetail] = useState<Task | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [error, setError] = useState("");
 
-  const projTasks = tasks.filter((t) => t.projectId === project.id);
-  const projMembers = members.filter((m) => project.memberIds.includes(m.id));
+  const detail = tasks.find((t) => t.id === detailId) ?? null;
 
-  const onDrop = (status: Status) => {
-    if (drag) moveTask(drag, status);
+  const onDrop = async (status: Status) => {
+    const taskId = drag;
     setDrag(null);
     setOver(null);
+    if (!taskId || !canEdit) return;
+
+    const previous = tasks;
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task || task.status === status) return;
+
+    setTasks((cur) => cur.map((t) => (t.id === taskId ? { ...t, status } : t)));
+    try {
+      await apiFetch(`/api/tasks/${taskId}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
+      router.refresh();
+    } catch (err) {
+      setTasks(previous);
+      setError(err instanceof ApiClientError ? err.message : "Ha ocurrido un error inesperado.");
+    }
   };
 
   return (
     <div className="flex h-full flex-col">
       <BoardToolbar
         project={project}
-        taskCount={projTasks.length}
-        memberCount={projMembers.length}
+        taskCount={tasks.length}
+        memberCount={members.length}
+        canCreateTask={canEdit}
         onImport={() => setImportOpen(true)}
         onExport={() => setExportOpen(true)}
         onCreateTask={() => setCreateStatus("todo")}
@@ -46,8 +87,8 @@ export function BoardScreen({ project }: { project: MockProject }) {
             <BoardColumn
               key={status}
               status={status}
-              tasks={projTasks.filter((t) => t.status === status)}
-              members={members}
+              tasks={tasks.filter((t) => t.status === status)}
+              canEdit={canEdit}
               draggingTaskId={drag}
               isDropTarget={over === status}
               onDragOver={() => setOver(status)}
@@ -56,16 +97,33 @@ export function BoardScreen({ project }: { project: MockProject }) {
               onCreateTask={() => setCreateStatus(status)}
               onDragStartTask={setDrag}
               onDragEndTask={() => setDrag(null)}
-              onOpenTask={setDetail}
+              onOpenTask={(t) => setDetailId(t.id)}
             />
           ))}
         </div>
       </div>
 
-      {createStatus && <TaskFormModal open onClose={() => setCreateStatus(null)} project={project} initialStatus={createStatus} />}
-      <TaskDetailModal task={detail} onClose={() => setDetail(null)} />
-      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={projTasks.length} />
-      <ImportModal open={importOpen} onClose={() => setImportOpen(false)} projectId={project.id} />
+      {createStatus && (
+        <TaskFormModal
+          open
+          onClose={() => setCreateStatus(null)}
+          project={project}
+          members={members}
+          initialStatus={createStatus}
+          onSaved={() => router.refresh()}
+        />
+      )}
+      <TaskDetailModal
+        task={detail}
+        tags={tags}
+        canEdit={canEdit}
+        canDelete={hasRole(project.myRole, "admin")}
+        onClose={() => setDetailId(null)}
+        onChanged={() => router.refresh()}
+      />
+      <ExportModal open={exportOpen} onClose={() => setExportOpen(false)} count={tasks.length} />
+      <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
+      {error && <Toast message={error} onDismiss={() => setError("")} />}
     </div>
   );
 }

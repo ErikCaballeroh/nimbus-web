@@ -1,13 +1,12 @@
 import { Icon, IconButton, Tooltip } from "../../../components/ui";
 import { es } from "../../../lib/i18n/es";
-import type { MockMember } from "../../../lib/mock/types";
 import { statusAccent, type Status, type Task } from "../types";
 import { TaskCard } from "./TaskCard";
 
 export function BoardColumn({
   status,
   tasks,
-  members,
+  canEdit,
   draggingTaskId,
   isDropTarget,
   onDragOver,
@@ -20,7 +19,7 @@ export function BoardColumn({
 }: {
   status: Status;
   tasks: Task[];
-  members: MockMember[];
+  canEdit: boolean;
   draggingTaskId: string | null;
   isDropTarget: boolean;
   onDragOver: () => void;
@@ -43,11 +42,13 @@ export function BoardColumn({
         <span className="h-2.5 w-2.5 rounded-full" style={{ background: statusAccent[status] }} />
         <span className="text-[13px] font-semibold text-foreground">{es.enums.status[status]}</span>
         <span className="rounded-md bg-secondary px-1.5 py-0.5 text-xs font-medium text-muted-foreground">{tasks.length}</span>
-        <Tooltip label="Añadir tarea">
-          <IconButton className="ml-auto h-7 w-7" onClick={onCreateTask}>
-            <Icon.plus width={16} height={16} />
-          </IconButton>
-        </Tooltip>
+        {canEdit && (
+          <Tooltip label="Añadir tarea">
+            <IconButton className="ml-auto h-7 w-7" onClick={onCreateTask}>
+              <Icon.plus width={16} height={16} />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2.5 overflow-y-auto px-2.5 pb-3">
@@ -55,7 +56,7 @@ export function BoardColumn({
           <TaskCard
             key={t.id}
             task={t}
-            assignee={members.find((m) => m.id === t.assigneeId)}
+            draggable={canEdit}
             dragging={draggingTaskId === t.id}
             onDragStart={() => onDragStartTask(t.id)}
             onDragEnd={onDragEndTask}
@@ -63,7 +64,7 @@ export function BoardColumn({
           />
         ))}
 
-        {tasks.length === 0 && (
+        {tasks.length === 0 && canEdit && (
           <button
             onClick={onCreateTask}
             className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-border-strong py-8 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"

@@ -15,6 +15,20 @@ if (!process.env.SEED_PASSWORD) {
 }
 const SEED_PASSWORD: string = process.env.SEED_PASSWORD;
 
+/** Mirrors features/projects/service.ts's candidateCodePrefix (not imported directly: that one retries against the database on collision, which this single-pass seed doesn't need). */
+function deriveCodePrefix(name: string, taken: Set<string>): string {
+  const letters = name.toUpperCase().replace(/[^A-Z]/g, "");
+  const base = (letters.slice(0, 3) || "PRJ").padEnd(3, "X");
+  for (let suffix = 0; suffix < 100; suffix++) {
+    const candidate = suffix === 0 ? base : `${base}${suffix}`;
+    if (!taken.has(candidate)) {
+      taken.add(candidate);
+      return candidate;
+    }
+  }
+  throw new Error(`Could not generate a unique code prefix for project name "${name}".`);
+}
+
 async function main() {
   console.log("Resetting existing data...");
   // Order matters: children before parents.
@@ -47,7 +61,10 @@ async function main() {
 
   console.log("Seeding projects and members...");
   const projectIdByMockId = new Map<string, string>();
+  const codePrefixByProjectId = new Map<string, string>();
+  const usedCodePrefixes = new Set<string>();
   for (const p of mockProjects) {
+    const codePrefix = deriveCodePrefix(p.name, usedCodePrefixes);
     const project = await prisma.project.create({
       data: {
         name: p.name,
@@ -56,10 +73,12 @@ async function main() {
         startDate: new Date(p.start),
         endDate: new Date(p.end),
         createdAt: new Date(p.createdAt),
+        codePrefix,
         createdBy: userIdByMockId.get(currentUserId)!,
       },
     });
     projectIdByMockId.set(p.id, project.id);
+    codePrefixByProjectId.set(project.id, codePrefix);
 
     for (const mockMemberId of p.memberIds) {
       await prisma.projectMember.create({
@@ -83,11 +102,16 @@ async function main() {
   }
 
   console.log("Seeding tasks, comments and tags...");
+  const taskSeqByProjectId = new Map<string, number>();
   for (const t of mockTasks) {
+    const projectId = projectIdByMockId.get(t.projectId)!;
+    const nextSeq = (taskSeqByProjectId.get(projectId) ?? 0) + 1;
+    taskSeqByProjectId.set(projectId, nextSeq);
+
     const task = await prisma.task.create({
       data: {
-        code: t.code,
-        projectId: projectIdByMockId.get(t.projectId)!,
+        code: `${codePrefixByProjectId.get(projectId)!}-${nextSeq}`,
+        projectId,
         title: t.title,
         description: t.description,
         status: t.status,
@@ -111,6 +135,10 @@ async function main() {
         },
       });
     }
+  }
+
+  for (const [projectId, taskSeq] of taskSeqByProjectId) {
+    await prisma.project.update({ where: { id: projectId }, data: { taskSeq } });
   }
 
   console.log("Seeding notifications...");
