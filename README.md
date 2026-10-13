@@ -27,15 +27,12 @@ doesn't collide with a native Postgres install. If you have an older `.env`
 pointing at `localhost:5432`, update both `DATABASE_URL` and
 `TEST_DATABASE_URL` to `5433`, then recreate the container with `pnpm db:up`.
 
-### Running the app in Docker
-
-Run `pnpm dev` on the host (above). An optional `app` profile also runs the
-dev server inside Docker (`pnpm dev:docker`), but avoid it on Windows/macOS:
-with the code bind-mounted through Docker Desktop's file sharing, the initial
-file scan is slow and Next.js's dev server can end up with an incomplete route
-list, so some route handlers (e.g. `/api/projects/:id/tasks/import/preview`)
-intermittently return `404` until restart. The Next.js docs recommend running
-`next dev` on the host for the same reason.
+Docker is only used for Postgres; always run `next dev` on the host, not
+inside Docker. With the code bind-mounted through Docker Desktop's file
+sharing, the initial file scan is slow and Next.js's dev server can end up
+with an incomplete route list, so some route handlers intermittently return
+`404` until restart. The Next.js docs recommend running `next dev` on the
+host for the same reason.
 
 ### Running the test suite
 
