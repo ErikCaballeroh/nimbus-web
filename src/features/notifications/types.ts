@@ -3,9 +3,13 @@ export type NotificationType = "assigned" | "comment" | "status" | "member" | "d
 export interface Notification {
   id: string;
   type: NotificationType;
-  actorId: string;
+  // null for notifications with no human actor (e.g. "due" reminders).
+  actorId: string | null;
+  actorName: string | null;
+  actorAvatarColor: string | null;
   text: string;
-  time: string;
+  createdAt: string;
   read: boolean;
-  projectId?: string;
+  projectId: string | null;
+  taskId: string | null;
 }
