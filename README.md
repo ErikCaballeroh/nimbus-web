@@ -85,10 +85,54 @@ Password recovery: resetting creates a hashed (SHA-256), single-use
 token valid for 1 hour. In development the reset link is logged to the
 server console instead of emailed (`[dev] Reset link for <email>: /reset-password?token=...`).
 
+### Projects (`/api/projects`)
+
+| Method | Path                       | Min. role | Body                                                      | Success |
+| ------ | --------------------------- | --------- | ----------------------------------------------------------- | -------- |
+| GET    | `/projects`                | member    | —                                                           | `200` projects the caller belongs to, with member avatars and task counts |
+| POST   | `/projects`                | session   | `{ name, description?, color?, startDate?, endDate? }`    | `201` project; caller becomes `owner` |
+| GET    | `/projects/:id`            | viewer    | —                                                           | `200` project |
+| PATCH  | `/projects/:id`            | admin     | any subset of the POST body                                | `200` project |
+| DELETE | `/projects/:id`            | owner     | —                                                           | `200 { ok: true }` |
+
+Every `:id` route responds `404` when the caller isn't a member (membership is never leaked) and `403` when their role is below the minimum.
+
+### Members (`/api/projects/:id/members`)
+
+| Method | Path                                  | Min. role | Body                      | Success |
+| ------ | --------------------------------------- | --------- | --------------------------- | -------- |
+| GET    | `/projects/:id/members`                | viewer    | —                           | `200` members with their role, newest last |
+| POST   | `/projects/:id/members`                | admin     | `{ userId, role }` (`admin`\|`editor`\|`viewer`) | `201 { ok: true }`; `409` if already a member |
+| PATCH  | `/projects/:id/members/:userId`        | admin     | `{ role }` (`owner`\|`admin`\|`editor`\|`viewer`) | `200 { ok: true }` |
+| DELETE | `/projects/:id/members/:userId`        | admin     | —                           | `200 { ok: true }` |
+
+Ownership rules (see section 3): only the current owner may set `role: "owner"` (this transfers ownership and demotes them to `admin`); the owner's membership can't otherwise be changed or removed; nobody can change their own role.
+
+### Users and team
+
+| Method | Path                | Auth    | Body | Success |
+| ------ | --------------------- | ------- | ---- | -------- |
+| GET    | `/api/users?search=` | session | —    | `200` up to 10 users matching the query by name or email (`{ id, name, email, avatarColor }`, never `passwordHash`) |
+| GET    | `/api/users/:id`     | session | —    | `200` user summary |
+| GET    | `/api/team`           | session | —    | `200` users who share at least one project with the caller, each with their total `projectCount` and `taskCount` |
+
 ## 3. Roles and permissions
 
-The project role matrix (who can do what per role) is added in Phase 5
-of `docs/ROADMAP.md`, alongside `lib/permissions.ts`.
+Role order: `viewer` < `editor` < `admin` < `owner`. Checked by `assertProjectRole(userId, projectId, minRole)` in `lib/permissions.ts`, which throws `404` for a non-member and `403` below the minimum.
+
+| Action                  | Minimum role |
+| ------------------------ | ------------- |
+| View a project           | `viewer`      |
+| Edit a project           | `admin`       |
+| Delete a project         | `owner`       |
+| Add a member             | `admin`       |
+| Remove a member          | `admin`       |
+| Change a member's role   | `admin`       |
+
+On top of the minimum-role check, these invariants are enforced in `features/members/service.ts` (not expressible as a single "minimum role"):
+- Only the owner can grant or revoke the `owner` role; granting it to someone else transfers ownership and demotes the previous owner to `admin` in the same transaction, so a project always has exactly one owner (also enforced at the database level, see section 4).
+- The owner's membership can never be removed.
+- Nobody can change their own role.
 
 ## 4. Database schema
 
