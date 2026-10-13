@@ -82,7 +82,7 @@ Rules:
 - Routes and methods follow `README.md` section 2 exactly, under the `/api` prefix (`/api/projects/:id/tasks`).
 - Every handler except `/api/auth/register|login|recover|reset-password` requires a session; respond `401` without one.
 - Authorization uses the role matrix in `README.md` section 3 through `assertProjectRole(userId, projectId, minRole)`. Respond `403` when the role is insufficient and `404` when the user is not a member (do not leak existence).
-- Error shape: `{ "error": { "code": "VALIDATION_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "INTERNAL", "message": string, "details"?: unknown } }`. `message` is in Spanish because the UI may show it.
+- Error shape: `{ "error": { "code": "VALIDATION_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "RATE_LIMITED" | "INTERNAL", "message": string, "details"?: unknown } }`. `message` is in Spanish because the UI may show it.
 - Validation errors return `422` with Zod issues in `details`.
 - Never return `password_hash` or any token. Select fields explicitly.
 - Multi-row writes (task import, project creation + owner membership) run in a Prisma transaction.

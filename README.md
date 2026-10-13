@@ -12,7 +12,7 @@ See `CLAUDE.md` for stack, conventions and folder structure, and
 Requirements: Node 20+, pnpm, Docker (for Postgres).
 
 ```bash
-cp .env.example .env     # fill in SEED_PASSWORD, leave DATABASE_URL as-is for local dev
+cp .env.example .env     # fill in SEED_PASSWORD and SESSION_SECRET, leave DATABASE_URL as-is for local dev
 pnpm install
 pnpm db:up                # starts Postgres in Docker (and a nimbus_test database for tests)
 pnpm db:migrate            # applies prisma/migrations to the "nimbus" database
@@ -68,6 +68,10 @@ the shape `{ "error": { "code", "message", "details"? } }` (see
 | POST   | `/auth/recover`         | public | `{ email }`                                       | `200 { ok: true }` (always, whether or not the email exists) |
 | POST   | `/auth/reset-password`  | public | `{ token, password, confirmPassword }`            | `200 { ok: true }`; `422` if the token is invalid, expired or already used |
 | GET    | `/auth/me`               | session | —                                                  | `200` current user |
+| GET    | `/auth/clear-session`    | public | —                                                  | `302` to `/login`, clearing the session cookie (used to break a redirect loop when the cookie's signature is valid but the user it points to no longer exists) |
+
+`register`, `login` and `recover` are rate-limited per IP (5 requests per 15
+minutes); past that they respond `429 RATE_LIMITED`.
 
 ### Profile (`/api/me`)
 
