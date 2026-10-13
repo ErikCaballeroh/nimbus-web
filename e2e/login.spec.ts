@@ -17,7 +17,8 @@ test("logs in, opens a project board and a task", async ({ page }) => {
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await expect(page).toHaveURL("/dashboard");
 
-  await page.goto("/projects/p1/board");
+  await page.goto("/projects");
+  await page.getByRole("table").getByText("Sitio Web Corporativo").click();
   await expect(page.getByText("Tablero Kanban")).toBeVisible();
 
   await page.getByText("Diseñar wireframes").click();
