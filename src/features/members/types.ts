@@ -1,9 +1,12 @@
-export type Role = "owner" | "admin" | "editor" | "viewer";
+import type { Role } from "../../lib/permissions";
 
-export interface Member {
-  id: string;
+export type { Role };
+
+export interface ProjectMember {
+  userId: string;
   name: string;
   email: string;
+  avatarColor: string;
   role: Role;
-  color: string;
+  joinedAt: string;
 }
