@@ -1,13 +1,29 @@
-'use client';
+import { notFound, redirect } from "next/navigation";
+import { ApiError } from "../../../../../lib/api";
+import { getCurrentUser } from "../../../../../lib/auth/dal";
+import { getProjectForUser } from "../../../../../features/projects/queries";
+import { listProjectMembers } from "../../../../../features/members/queries";
+import type { Project } from "../../../../../features/projects/types";
+import type { ProjectMember } from "../../../../../features/members/types";
+import { MembersScreen } from "../../../../../features/members/components/MembersScreen";
 
-import { useParams } from "next/navigation";
-import { MembersScreen } from "@/src/features/members/components/MembersScreen";
-import { useStore } from "@/src/store";
+export default async function MembersPage({ params }: { params: Promise<{ projectId: string }> }) {
+    const user = await getCurrentUser();
+    if (!user) redirect("/login");
 
-export default function MembersPage() {
-    const { projectId } = useParams<{ projectId: string }>();
-    const { projects } = useStore();
-    const project = projects.find((p) => p.id === projectId);
-    if (!project) return null;
-    return <MembersScreen project={project} />;
+    const { projectId } = await params;
+
+    let project: Project;
+    let members: ProjectMember[];
+    try {
+        [project, members] = await Promise.all([
+            getProjectForUser(user.id, projectId),
+            listProjectMembers(user.id, projectId),
+        ]);
+    } catch (err) {
+        if (err instanceof ApiError && err.code === "NOT_FOUND") notFound();
+        throw err;
+    }
+
+    return <MembersScreen project={project} members={members} />;
 }

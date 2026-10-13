@@ -1,6 +1,6 @@
-import type { Project } from "../../features/projects/types";
+import type { MockProject } from "./types";
 
-export const projects: Project[] = [
+export const projects: MockProject[] = [
   {
     id: "p1",
     name: "Sitio Web Corporativo",

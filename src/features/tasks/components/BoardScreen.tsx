@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useStore } from "../../../store";
 import { ExportModal } from "../../import-export/components/ExportModal";
 import { ImportModal } from "../../import-export/components/ImportModal";
-import type { Project } from "../../projects/types";
+import type { MockProject } from "../../../lib/mock/types";
 import { statusOrder, type Status, type Task } from "../types";
 import { BoardColumn } from "./BoardColumn";
 import { BoardToolbar } from "./BoardToolbar";
 import { TaskDetailModal } from "./TaskDetailModal";
 import { TaskFormModal } from "./TaskFormModal";
 
-export function BoardScreen({ project }: { project: Project }) {
+export function BoardScreen({ project }: { project: MockProject }) {
   const { tasks, members, moveTask } = useStore();
   const [drag, setDrag] = useState<string | null>(null);
   const [over, setOver] = useState<Status | null>(null);

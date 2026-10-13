@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Field, Input, Modal, Select, Spinner, Textarea } from "../../../components/ui";
 import { es } from "../../../lib/i18n/es";
 import { useStore } from "../../../store";
-import type { Project } from "../../projects/types";
+import type { MockProject } from "../../../lib/mock/types";
 import { statusOrder, type Priority, type Status } from "../types";
 
 export function TaskFormModal({
@@ -15,7 +15,7 @@ export function TaskFormModal({
 }: {
   open: boolean;
   onClose: () => void;
-  project: Project;
+  project: MockProject;
   initialStatus?: Status;
 }) {
   const { addTask, members } = useStore();

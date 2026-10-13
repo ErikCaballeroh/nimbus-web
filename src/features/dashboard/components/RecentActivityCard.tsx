@@ -1,10 +1,10 @@
 import { useRouter } from "next/navigation";
 import { Avatar, Card } from "../../../components/ui";
 import { relTime } from "../../../lib/utils";
-import type { Member } from "../../members/types";
+import type { MockMember } from "../../../lib/mock/types";
 import type { Notification } from "../../notifications/types";
 
-export function RecentActivityCard({ notifications, members }: { notifications: Notification[]; members: Member[] }) {
+export function RecentActivityCard({ notifications, members }: { notifications: Notification[]; members: MockMember[] }) {
   const router = useRouter();
   return (
     <Card className="flex flex-col p-5">

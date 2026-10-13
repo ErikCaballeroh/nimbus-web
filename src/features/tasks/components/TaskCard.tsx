@@ -1,6 +1,6 @@
 import { Avatar, Icon, Tag } from "../../../components/ui";
 import { fmtDateShort, isOverdue } from "../../../lib/utils";
-import type { Member } from "../../members/types";
+import type { MockMember } from "../../../lib/mock/types";
 import type { Task } from "../types";
 import { PriorityBadge } from "./PriorityBadge";
 
@@ -13,7 +13,7 @@ export function TaskCard({
   onClick,
 }: {
   task: Task;
-  assignee: Member | undefined;
+  assignee: MockMember | undefined;
   dragging: boolean;
   onDragStart: () => void;
   onDragEnd: () => void;

@@ -5,18 +5,15 @@ import { members as seedMembers } from "../lib/mock/members";
 import { projects as seedProjects } from "../lib/mock/projects";
 import { tasks as seedTasks } from "../lib/mock/tasks";
 import { notifications as seedNotifs } from "../lib/mock/notifications";
-import type { Project } from "../features/projects/types";
+import type { MockProject, MockMember } from "../lib/mock/types";
 import type { Task, Status } from "../features/tasks/types";
-import type { Member } from "../features/members/types";
 import type { Notification } from "../features/notifications/types";
 
 interface Store {
-  projects: Project[];
+  projects: MockProject[];
   tasks: Task[];
-  members: Member[];
+  members: MockMember[];
   notifications: Notification[];
-  addProject: (p: Omit<Project, "id" | "createdAt">) => void;
-  updateProject: (id: string, patch: Partial<Project>) => void;
   addTask: (t: Omit<Task, "id" | "code" | "comments">) => void;
   updateTask: (id: string, patch: Partial<Task>) => void;
   moveTask: (id: string, status: Status) => void;
@@ -24,7 +21,6 @@ interface Store {
   importTasks: (projectId: string, rows: { title: string; priority: Task["priority"]; status: Status }[]) => void;
   markAllRead: () => void;
   toggleRead: (id: string) => void;
-  addMember: (m: Omit<Member, "id">, projectId: string) => void;
 }
 
 const Ctx = createContext<Store | null>(null);
@@ -33,9 +29,9 @@ let seq = 900;
 const uid = (p: string) => p + ++seq;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = useState(seedProjects);
+  const [projects] = useState(seedProjects);
   const [tasks, setTasks] = useState(seedTasks);
-  const [members, setMembers] = useState(seedMembers);
+  const [members] = useState(seedMembers);
   const [notifications, setNotifications] = useState(seedNotifs);
 
   const value = useMemo<Store>(
@@ -44,13 +40,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       tasks,
       members,
       notifications,
-      addProject: (p) =>
-        setProjects((cur) => [
-          { ...p, id: uid("p"), createdAt: new Date("2026-09-01").toISOString() },
-          ...cur,
-        ]),
-      updateProject: (id, patch) =>
-        setProjects((cur) => cur.map((p) => (p.id === id ? { ...p, ...patch } : p))),
       addTask: (t) =>
         setTasks((cur) => [
           { ...t, id: uid("t"), code: "NIM-" + seq, comments: [] },
@@ -94,13 +83,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       markAllRead: () => setNotifications((cur) => cur.map((n) => ({ ...n, read: true }))),
       toggleRead: (id) =>
         setNotifications((cur) => cur.map((n) => (n.id === id ? { ...n, read: !n.read } : n))),
-      addMember: (m, projectId) => {
-        const id = uid("u");
-        setMembers((cur) => [...cur, { ...m, id }]);
-        setProjects((cur) =>
-          cur.map((p) => (p.id === projectId ? { ...p, memberIds: [...p.memberIds, id] } : p))
-        );
-      },
     }),
     [projects, tasks, members, notifications]
   );

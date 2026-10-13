@@ -1,6 +1,6 @@
 import { Icon, IconButton, Tooltip } from "../../../components/ui";
 import { es } from "../../../lib/i18n/es";
-import type { Member } from "../../members/types";
+import type { MockMember } from "../../../lib/mock/types";
 import { statusAccent, type Status, type Task } from "../types";
 import { TaskCard } from "./TaskCard";
 
@@ -20,7 +20,7 @@ export function BoardColumn({
 }: {
   status: Status;
   tasks: Task[];
-  members: Member[];
+  members: MockMember[];
   draggingTaskId: string | null;
   isDropTarget: boolean;
   onDragOver: () => void;

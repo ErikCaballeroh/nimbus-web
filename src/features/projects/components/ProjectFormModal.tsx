@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Field, Input, Modal, Textarea } from "../../../components/ui";
-import { useStore } from "../../../store";
-import type { Project } from "../types";
+import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "../../../lib/apiClient";
+import type { ProjectListItem } from "../types";
 
 const palette = ["#4f46e5", "#0891b2", "#db2777", "#16a34a", "#ea580c", "#7c3aed"];
 
@@ -14,21 +15,40 @@ export function ProjectFormModal({
 }: {
   open: boolean;
   onClose: () => void;
-  project?: Project;
+  project?: ProjectListItem;
 }) {
-  const { addProject, updateProject } = useStore();
+  const router = useRouter();
   const [name, setName] = useState(project?.name ?? "");
   const [desc, setDesc] = useState(project?.description ?? "");
-  const [start, setStart] = useState(project?.start ?? "2026-09-01");
-  const [end, setEnd] = useState(project?.end ?? "2026-12-01");
+  const [start, setStart] = useState(project?.startDate?.slice(0, 10) ?? "");
+  const [end, setEnd] = useState(project?.endDate?.slice(0, 10) ?? "");
   const [color, setColor] = useState(project?.color ?? palette[0]);
-  const [err, setErr] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
 
-  const save = () => {
-    if (name.trim().length < 3) return setErr("El nombre debe tener al menos 3 caracteres");
-    if (project) updateProject(project.id, { name, description: desc, start, end, color });
-    else addProject({ name, description: desc, start, end, color, memberIds: ["u1"] });
-    onClose();
+  const save = async () => {
+    setErrors({});
+    setSaving(true);
+    try {
+      const body = {
+        name,
+        description: desc || undefined,
+        color,
+        startDate: start || undefined,
+        endDate: end || undefined,
+      };
+      if (project) await apiFetch(`/api/projects/${project.id}`, { method: "PATCH", body: JSON.stringify(body) });
+      else await apiFetch("/api/projects", { method: "POST", body: JSON.stringify(body) });
+      router.refresh();
+      onClose();
+    } catch (err) {
+      if (err instanceof ApiClientError) {
+        const fieldErrors = fieldErrorsFromDetails(err.details);
+        setErrors(Object.keys(fieldErrors).length ? fieldErrors : { name: err.message });
+      }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -40,20 +60,20 @@ export function ProjectFormModal({
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>Cancelar</Button>
-          <Button onClick={save}>{project ? "Guardar cambios" : "Crear proyecto"}</Button>
+          <Button onClick={save} disabled={saving}>{project ? "Guardar cambios" : "Crear proyecto"}</Button>
         </>
       }
     >
       <div className="flex flex-col gap-4">
-        <Field label="Nombre del proyecto" error={err}>
-          <Input value={name} onChange={(e) => { setName(e.target.value); setErr(""); }} placeholder="Sitio Web Corporativo" error={!!err} />
+        <Field label="Nombre del proyecto" error={errors.name}>
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Sitio Web Corporativo" error={!!errors.name} />
         </Field>
         <Field label="Descripción">
           <Textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="¿Cuál es el objetivo de este proyecto?" />
         </Field>
         <div className="grid grid-cols-2 gap-4">
           <Field label="Fecha de inicio"><Input type="date" value={start} onChange={(e) => setStart(e.target.value)} /></Field>
-          <Field label="Fecha de entrega"><Input type="date" value={end} onChange={(e) => setEnd(e.target.value)} /></Field>
+          <Field label="Fecha de entrega" error={errors.endDate}><Input type="date" value={end} onChange={(e) => setEnd(e.target.value)} error={!!errors.endDate} /></Field>
         </div>
         <Field label="Color">
           <div className="flex gap-2">
