@@ -5,12 +5,11 @@ import { useState, type ReactNode } from "react";
 import { AvatarStack, Card, Icon, IconButton, Progress } from "../../../components/ui";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import { fmtDate } from "../../../lib/utils";
-import type { Member } from "../../members/types";
-import type { Project } from "../types";
+import type { ProjectListItem, ProjectMemberSummary } from "../types";
 import { ProjectRowMenu } from "./ProjectRowMenu";
 
 export type SortKey = "name" | "progress" | "end";
-export type ProjectRow = { p: Project; taskCount: number; progress: number; mem: Member[] };
+export type ProjectRow = { p: ProjectListItem; taskCount: number; progress: number; mem: ProjectMemberSummary[] };
 
 function Th({ children, onClick, active, asc }: { children: ReactNode; onClick: () => void; active: boolean; asc: boolean }) {
   return (
@@ -29,12 +28,14 @@ export function ProjectsTable({
   asc,
   onToggleSort,
   onEdit,
+  onDelete,
 }: {
   rows: ProjectRow[];
   sort: SortKey;
   asc: boolean;
   onToggleSort: (k: SortKey) => void;
-  onEdit: (p: Project) => void;
+  onEdit: (p: ProjectListItem) => void;
+  onDelete: (p: ProjectListItem) => void;
 }) {
   const router = useRouter();
   const [menu, setMenu] = useState<string | null>(null);
@@ -72,7 +73,9 @@ export function ProjectsTable({
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3.5"><AvatarStack people={mem} size={28} /></td>
+                <td className="px-4 py-3.5">
+                  <AvatarStack people={mem.map((m) => ({ id: m.id, name: m.name, color: m.avatarColor }))} size={28} />
+                </td>
                 <td className="px-4 py-3.5 text-muted-foreground">{taskCount} tareas</td>
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2.5">
@@ -80,14 +83,20 @@ export function ProjectsTable({
                     <span className="w-9 text-right text-xs font-medium tabular-nums text-muted-foreground">{progress}%</span>
                   </div>
                 </td>
-                <td className="px-4 py-3.5 whitespace-nowrap text-muted-foreground">{fmtDate(p.end)}</td>
+                <td className="px-4 py-3.5 whitespace-nowrap text-muted-foreground">{p.endDate ? fmtDate(p.endDate) : "—"}</td>
                 <td className="px-4 py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
                   <div className="relative inline-block" ref={menu === p.id ? menuRef : undefined}>
                     <IconButton className="opacity-0 group-hover:opacity-100" onClick={() => setMenu(menu === p.id ? null : p.id)}>
                       <Icon.dots width={18} height={18} />
                     </IconButton>
                     {menu === p.id && (
-                      <ProjectRowMenu projectId={p.id} onEdit={() => onEdit(p)} onClose={() => setMenu(null)} />
+                      <ProjectRowMenu
+                        projectId={p.id}
+                        myRole={p.myRole}
+                        onEdit={() => onEdit(p)}
+                        onDelete={() => onDelete(p)}
+                        onClose={() => setMenu(null)}
+                      />
                     )}
                   </div>
                 </td>

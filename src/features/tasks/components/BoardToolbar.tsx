@@ -1,5 +1,5 @@
 import { Button, Icon } from "../../../components/ui";
-import type { Project } from "../../projects/types";
+import type { MockProject } from "../../../lib/mock/types";
 
 export function BoardToolbar({
   project,
@@ -9,7 +9,7 @@ export function BoardToolbar({
   onExport,
   onCreateTask,
 }: {
-  project: Project;
+  project: MockProject;
   taskCount: number;
   memberCount: number;
   onImport: () => void;
