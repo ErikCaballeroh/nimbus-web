@@ -14,6 +14,7 @@
     "test:e2e": "playwright test",
     "postinstall": "prisma generate",
     "db:up": "docker compose up -d postgres",
+    "dev:docker": "docker compose --profile app up --build",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed"
   },

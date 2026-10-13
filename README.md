@@ -22,6 +22,20 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000). All seeded users share the password in `SEED_PASSWORD`.
 
+### Running the app in Docker too
+
+If a host port conflicts with `5432` (e.g. a native Postgres install), run the
+Next.js dev server in Docker as well, on the same network as `postgres`:
+
+```bash
+pnpm dev:docker            # docker compose --profile app up --build
+docker compose exec app pnpm db:migrate
+docker compose exec app pnpm db:seed
+```
+
+This never touches a host DB port; the app connects to `postgres:5432`
+inside the Docker network.
+
 ### Running the test suite
 
 ```bash

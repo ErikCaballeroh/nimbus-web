@@ -16,5 +16,28 @@ services:
       timeout: 5s
       retries: 10
 
+  # Optional: runs the Next.js dev server inside Docker too, on the same
+  # network as `postgres`, so it never touches a host port for the database.
+  # Useful when a host port (e.g. a native Postgres install) conflicts with
+  # 5432. Start with `docker compose --profile app up`.
+  app:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://nimbus:nimbus@postgres:5432/nimbus?schema=public
+      TEST_DATABASE_URL: postgresql://nimbus:nimbus@postgres:5432/nimbus_test?schema=public
+      SEED_PASSWORD: ${SEED_PASSWORD:-changeme123}
+      SESSION_SECRET: ${SESSION_SECRET:-replace-with-a-long-random-string}
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
 volumes:
   nimbus_pgdata:
