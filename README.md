@@ -108,6 +108,36 @@ Every `:id` route responds `404` when the caller isn't a member (membership is n
 
 Ownership rules (see section 3): only the current owner may set `role: "owner"` (this transfers ownership and demotes them to `admin`); the owner's membership can't otherwise be changed or removed; nobody can change their own role.
 
+### Tasks (`/api/projects/:id/tasks`, `/api/tasks`)
+
+| Method | Path                          | Min. role | Body                                                                 | Success |
+| ------ | ------------------------------- | --------- | ----------------------------------------------------------------------- | -------- |
+| GET    | `/projects/:id/tasks`           | viewer    | query: `status?`, `assignee?`, `priority?`                              | `200` tasks for the project |
+| POST   | `/projects/:id/tasks`           | editor    | `{ title, description?, status?, priority?, assigneeId?, dueDate? }`  | `201` task; `422` if `assigneeId` isn't a project member |
+| GET    | `/tasks/:id`                     | viewer    | —                                                                         | `200` task |
+| PATCH  | `/tasks/:id`                     | editor    | any subset of the POST body except `status`                             | `200` task |
+| DELETE | `/tasks/:id`                     | admin     | —                                                                         | `200 { ok: true }` |
+| PATCH  | `/tasks/:id/status`              | editor    | `{ status }`                                                             | `200` task |
+| PUT    | `/tasks/:id/tags`                | editor    | `{ tagIds: string[] }` (replaces the full set)                           | `200` task |
+
+Task codes (`NIM-101`) are `<project.codePrefix>-<n>`, assigned when the
+task is created; `n` comes from an atomic per-project counter
+(`projects.task_seq`), so it stays correct under concurrent creation. The
+prefix is derived from the project name once, at project creation, and
+never changes.
+
+### Tags (`/api/tags`) and comments (`/api/tasks/:id/comments`, `/api/comments`)
+
+| Method | Path                       | Auth / min. role        | Body              | Success |
+| ------ | ---------------------------- | -------------------------- | ------------------- | -------- |
+| GET    | `/tags`                      | session                    | —                    | `200` all tags, alphabetical |
+| POST   | `/tags`                      | session                    | `{ name, color? }` | `201` tag; `409` if the name is taken |
+| GET    | `/tasks/:id/comments`        | viewer (of the task's project) | —               | `200` comments, oldest first |
+| POST   | `/tasks/:id/comments`        | editor (of the task's project) | `{ text }`      | `201` comment |
+| DELETE | `/comments/:id`              | editor if deleting your own comment, admin otherwise | — | `200 { ok: true }` |
+
+Tags are a global catalog shared by all projects, not scoped per project.
+
 ### Users and team
 
 | Method | Path                | Auth    | Body | Success |
@@ -128,11 +158,22 @@ Role order: `viewer` < `editor` < `admin` < `owner`. Checked by `assertProjectRo
 | Add a member             | `admin`       |
 | Remove a member          | `admin`       |
 | Change a member's role   | `admin`       |
+| View tasks / the board    | `viewer`      |
+| Create a task             | `editor`      |
+| Edit a task                | `editor`      |
+| Change a task's status     | `editor`      |
+| Delete a task               | `admin`       |
+| Create/assign tags         | `editor`      |
+| Add a comment               | `editor`      |
+| Delete your own comment    | `editor`      |
+| Delete someone else's comment | `admin`    |
 
 On top of the minimum-role check, these invariants are enforced in `features/members/service.ts` (not expressible as a single "minimum role"):
 - Only the owner can grant or revoke the `owner` role; granting it to someone else transfers ownership and demotes the previous owner to `admin` in the same transaction, so a project always has exactly one owner (also enforced at the database level, see section 4).
 - The owner's membership can never be removed.
 - Nobody can change their own role.
+
+`features/tasks/service.ts` also validates that a task's `assigneeId`, when set, is a member of the task's project (`422` otherwise) — this isn't expressible as a role check either.
 
 ## 4. Database schema
 
@@ -146,7 +187,7 @@ and the project date-range check.
 | ------------------------ | --------------------------------------------------------------------- |
 | `users`                 | Accounts: name, email, password hash, avatar color, theme preference |
 | `password_reset_tokens` | Single-use, hashed, time-limited tokens for `/recover` (Phase 4)      |
-| `projects`               | Name, description, color, date range, creator                        |
+| `projects`               | Name, description, color, date range, task-code prefix and counter, creator |
 | `project_members`        | Join table: a user's `role` (`owner`/`admin`/`editor`/`viewer`) on a given project; exactly one `owner` per project |
 | `tasks`                  | Belongs to a project; status, priority, assignee, due date, code (`NIM-101`) |
 | `tags`                   | Global catalog of task labels                                        |
