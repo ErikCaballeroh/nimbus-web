@@ -12,7 +12,7 @@ export default defineConfig({
       // dev data.
       DATABASE_URL:
         process.env.TEST_DATABASE_URL ??
-        "postgresql://nimbus:nimbus@localhost:5432/nimbus_test?schema=public",
+        "postgresql://nimbus:nimbus@localhost:5433/nimbus_test?schema=public",
     },
   },
   resolve: {

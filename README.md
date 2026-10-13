@@ -22,19 +22,20 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000). All seeded users share the password in `SEED_PASSWORD`.
 
-### Running the app in Docker too
+The Docker Postgres is published on host port **5433** (not 5432), so it
+doesn't collide with a native Postgres install. If you have an older `.env`
+pointing at `localhost:5432`, update both `DATABASE_URL` and
+`TEST_DATABASE_URL` to `5433`, then recreate the container with `pnpm db:up`.
 
-If a host port conflicts with `5432` (e.g. a native Postgres install), run the
-Next.js dev server in Docker as well, on the same network as `postgres`:
+### Running the app in Docker
 
-```bash
-pnpm dev:docker            # docker compose --profile app up --build
-docker compose exec app pnpm db:migrate
-docker compose exec app pnpm db:seed
-```
-
-This never touches a host DB port; the app connects to `postgres:5432`
-inside the Docker network.
+Run `pnpm dev` on the host (above). An optional `app` profile also runs the
+dev server inside Docker (`pnpm dev:docker`), but avoid it on Windows/macOS:
+with the code bind-mounted through Docker Desktop's file sharing, the initial
+file scan is slow and Next.js's dev server can end up with an incomplete route
+list, so some route handlers (e.g. `/api/projects/:id/tasks/import/preview`)
+intermittently return `404` until restart. The Next.js docs recommend running
+`next dev` on the host for the same reason.
 
 ### Running the test suite
 
