@@ -24,7 +24,15 @@ export function TaskCard({
       onDragStart={draggable ? onDragStart : undefined}
       onDragEnd={draggable ? onDragEnd : undefined}
       onClick={onClick}
-      className={`group cursor-pointer rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition-all duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-md)] ${draggable ? "active:cursor-grabbing" : ""} ${dragging ? "opacity-40 rotate-1" : ""
+      role="button"
+      tabIndex={0}
+      aria-label={`${task.code}: ${task.title}`}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        onClick();
+      }}
+      className={`group cursor-pointer rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition-all duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${draggable ? "active:cursor-grabbing" : ""} ${dragging ? "opacity-40 rotate-1" : ""
         }`}
     >
       <div className="mb-2 flex items-center justify-between">
