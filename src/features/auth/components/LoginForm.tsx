@@ -47,11 +47,6 @@ export function LoginForm() {
         <Field label="Contraseña" error={err.password}>
           <PasswordInput value={pw} onChange={(e) => setPw(e.target.value)} placeholder="••••••••" error={!!err.password} />
         </Field>
-        <div className="flex items-center">
-          <label className="flex cursor-pointer items-center gap-2 text-[13px] text-muted-foreground">
-            <input type="checkbox" defaultChecked className="h-4 w-4 accent-[var(--primary)]" /> Recordarme
-          </label>
-        </div>
         <Button type="submit" size="lg" disabled={loading} className="mt-1 w-full">
           {loading ? <Spinner /> : "Iniciar sesión"}
         </Button>

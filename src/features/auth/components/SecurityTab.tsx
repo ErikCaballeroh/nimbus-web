@@ -1,13 +1,9 @@
 'use client';
 
 import { useState } from "react";
-import { Button, Field, Icon, PasswordInput } from "@/components/ui";
+import { Button, Field, PasswordInput } from "@/components/ui";
 import { apiFetch, ApiClientError, fieldErrorsFromDetails } from "@/lib/apiClient";
 import { SettingsSection } from "./SettingsSection";
-
-const sessions = [
-  { device: "Esta sesión", loc: "", time: "Sesión actual", current: true },
-];
 
 export function SecurityTab() {
   const [f, setF] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
@@ -66,36 +62,6 @@ export function SecurityTab() {
         <div className="mt-5 flex items-center justify-end gap-2.5">
           {saved && <span className="text-[13px] text-success">Contraseña actualizada ✓</span>}
           <Button onClick={save} disabled={saving}>Actualizar contraseña</Button>
-        </div>
-      </SettingsSection>
-
-      <SettingsSection title="Autenticación en dos pasos" desc="Añade una capa extra de seguridad a tu cuenta.">
-        <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/40 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground"><Icon.shield width={18} height={18} /></span>
-            <div>
-              <div className="text-[13px] font-medium text-foreground">Aplicación de autenticación</div>
-              <div className="text-xs text-muted-foreground">Recomendado · No configurado</div>
-            </div>
-          </div>
-          <Button variant="secondary" size="sm">Activar</Button>
-        </div>
-      </SettingsSection>
-
-      <SettingsSection title="Sesiones activas" desc="Dispositivos donde tu cuenta está conectada actualmente.">
-        <div className="flex flex-col divide-y divide-border">
-          {sessions.map((s, i) => (
-            <div key={i} className="flex items-center gap-3.5 py-3.5 first:pt-0 last:pb-0">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground"><Icon.device width={18} height={18} /></span>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 text-[13px] font-medium text-foreground">
-                  {s.device}
-                  {s.current && <span className="rounded-md bg-success/12 px-1.5 py-0.5 text-[11px] font-medium text-success">Actual</span>}
-                </div>
-                <div className="text-xs text-muted-foreground">{s.time}</div>
-              </div>
-            </div>
-          ))}
         </div>
       </SettingsSection>
     </div>
