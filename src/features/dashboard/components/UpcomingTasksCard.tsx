@@ -6,7 +6,7 @@ import type { UpcomingTask } from "@/features/dashboard/types";
 
 export function UpcomingTasksCard({ tasks }: { tasks: UpcomingTask[] }) {
   return (
-    <Card className="p-5">
+    <Card className="p-5 lg:col-span-3">
       <h3 className="mb-4 text-[15px] font-semibold text-foreground">Tareas próximas</h3>
       {tasks.length === 0 ? (
         <EmptyState icon={<Icon.check_circle width={22} height={22} />} title="Sin tareas pendientes" body="No hay tareas con fecha límite próxima." />

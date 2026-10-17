@@ -73,9 +73,8 @@ test("dashboard, team, notifications, settings and header widgets", async ({ pag
   await page.getByRole("button", { name: "Actualizar contraseña" }).click();
   await expect(page.getByText("Contraseña actualizada ✓")).toBeVisible();
 
-  // Header: search box, notification bell dropdown, theme toggle
+  // Header: notification bell dropdown, theme toggle
   await page.goto("/dashboard");
-  await page.getByPlaceholder("Buscar…").fill("algo");
   async function clickThemeToggle() {
     const isDark = await page.locator("html").evaluate((el) => el.classList.contains("dark"));
     const tooltipLabel = isDark ? "Modo claro" : "Modo oscuro";

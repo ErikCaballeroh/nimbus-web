@@ -37,14 +37,6 @@ export function Header({
         {subtitle && <p className="truncate text-[13px] text-muted-foreground">{subtitle}</p>}
       </div>
 
-      <div className="relative hidden md:block">
-        <Icon.search width={16} height={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          placeholder="Buscar…"
-          className="h-9.5 w-56 rounded-lg border border-border-strong bg-card pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground/70 transition-all focus:w-72 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
-        />
-      </div>
-
       {actions}
 
       <Tooltip label={theme === "light" ? "Modo oscuro" : "Modo claro"}>

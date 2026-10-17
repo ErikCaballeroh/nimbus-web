@@ -6,7 +6,6 @@ import type { Notification } from "@/features/notifications/types";
 import type { DashboardSummary } from "@/features/dashboard/types";
 import { ProjectsProgressChart } from "./ProjectsProgressChart";
 import { RecentActivityCard } from "./RecentActivityCard";
-import { SprintBurndownChart } from "./SprintBurndownChart";
 import { StatCard } from "./StatCard";
 import { UpcomingTasksCard } from "./UpcomingTasksCard";
 
@@ -39,12 +38,11 @@ export function DashboardScreen({
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <SprintBurndownChart theme={theme} />
+        <ProjectsProgressChart data={perProject} theme={theme} />
         <RecentActivityCard notifications={recentActivity} />
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <ProjectsProgressChart data={perProject} theme={theme} />
         <UpcomingTasksCard tasks={summary.upcomingTasks} />
       </div>
     </div>
