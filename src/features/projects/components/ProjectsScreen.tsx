@@ -51,7 +51,6 @@ export function ProjectsScreen({ projects }: { projects: ProjectListItem[] }) {
           />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="secondary" size="md"><Icon.filter width={16} height={16} /> Filtrar</Button>
           <Button size="md" onClick={() => setCreating(true)}><Icon.plus width={17} height={17} /> Nuevo proyecto</Button>
         </div>
       </div>
